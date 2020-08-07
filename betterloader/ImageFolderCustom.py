@@ -82,7 +82,7 @@ def make_dataset(directory, class_to_idx, extensions=None, is_valid_file=None,in
     #     train += instances[:int(len(instances)*trainp)]
     #     test += instances[int(len(instances)*trainp):int(len(instances)*(1-valp))]
     #     val += instances[int(len(instances)*(1-valp)):]
-    
+
         '''
         for root, _, fnames in sorted(os.walk(target_dir, followlinks=True)):
             for fname in sorted(fnames):
@@ -169,7 +169,7 @@ class DatasetFolder(VisionDataset):
         # classes = [str(x) for x in range(1,23)]
         # classes.sort()
         # class_to_idx = {classes[i]: i for i in range(len(classes))}
-        classes,class_to_idx = self.class_data
+        classes,class_to_idx = self.class_data(dir)
 
         return classes, class_to_idx
 

@@ -39,13 +39,16 @@ class BetterLoader:
 	def __init__(self):
 		pass
 
-	def fetch_segmented_dataloaders(self, basepath, batch_size, transform, num_workers=8, subset_json_path=None, index_json_path=None, dataset_metadata):
+	def fetch_segmented_dataloaders(self, basepath, batch_size, transform, num_workers=8, subset_json_path=None, index_json_path=None, dataset_metadata = None):
 		'''Return a 2 element tuple, containing a list of dataloaders (train, test, split) along with a tuple containing their sizes'''
 		
 		#when we use this we can just have a separate file that defines this metadata per dataset, as it should always be constant
 		#we might want to add the index_json to the metadata
 		 train_test_val_instances, class_data, pretransform = dataset_metadata
 
+
+		#this code feels unnecessary rn, we should just enforce that the user supplies the index.
+		#or we can put the index in the metadata
 		'''if index_json_path == None:
         	print("No index path specified, using default index path...")
 			_ensure_folder(DEFAULT_INDEX_PATH)
