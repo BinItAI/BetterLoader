@@ -47,49 +47,6 @@ def make_dataset(directory, class_to_idx, extensions=None, is_valid_file=None,in
     
     train,test,val = train_test_val_instances(directory,class_to_idx,index, is_valid_file)
 
-    # train, test, val = [], [], []
-    # #import glob
-    # i = 0
-
-    
-    # for target_class in sorted(class_to_idx.keys()):
-    #     #print(i)
-    #     i+=1
-        
-    #     class_index = class_to_idx[target_class]
-    #     target_dir = directory#os.path.join(directory), target_class)
-    #     if not os.path.isdir(target_dir):
-    #         continue
-    #     instances = []
-    #     '''
-    #     for file in index[target_class]:
-    #         #if file[file.rfind('_')+1:file.rfind('.')] == target_class:
-    #         if is_valid_file(file):
-    #             for pt in pts[file]:
-    #                 path = os.path.join(target_dir,file)
-    #                 item = (path, class_index, pt)
-    #                 instances.append(item)
-    #     '''
-    #     for it in index[target_class]:
-    #         instances += [(target_dir +'/'+ it[0]+'.jpg', class_index, (it[1],it[2]))]
-
-        
-        
-    #     trainp = 0.6
-    #     testp = 0.2
-    #     valp = 0.2
-
-    #     train += instances[:int(len(instances)*trainp)]
-    #     test += instances[int(len(instances)*trainp):int(len(instances)*(1-valp))]
-    #     val += instances[int(len(instances)*(1-valp)):]
-
-        '''
-        for root, _, fnames in sorted(os.walk(target_dir, followlinks=True)):
-            for fname in sorted(fnames):
-                path = os.path.join(root, fname)
-                if is_valid_file(path):
-                    item = path, class_index
-                    instances.append(item)'''
     if instance == 'train':
         return train
     if instance == 'test':
@@ -164,11 +121,7 @@ class DatasetFolder(VisionDataset):
         Ensures:
             No class is a subdirectory of another.
         """
-        # classes =list(set([cat_from_path(d) for d in os.listdir(dir)]))
-        # #print(classes)
-        # classes = [str(x) for x in range(1,23)]
-        # classes.sort()
-        # class_to_idx = {classes[i]: i for i in range(len(classes))}
+
         classes,class_to_idx = self.class_data(dir,self.index)
 
         return classes, class_to_idx
@@ -188,25 +141,7 @@ class DatasetFolder(VisionDataset):
         path = values[0]
         sample = self.loader(path)
         sample, target = self.pretransform(sample,values)
-        # w,h = sample.size[:2]
-        # pt0 = float(pt[0]) * w
-        # pt1 = float(pt[1]) * h
-        # d = np.min([w,h])
-        # #print(d)
-        # p = int(256./1100. * d)
-        # #print(p)
-        # p = int(p/1.414)
-        # #print(sample.size)
-        # #print(p)
-        # ps = (pt0-p,pt1-p,pt0+p,pt1+p)
-        # ps_m = (0,0,w,h)
-        # ps2 = [int(np.min([x,y])) if y != 0 else int(np.max([x,y])) for x,y in zip(ps,ps_m)]
-        # #print(ps2)
-        # sample = sample.crop(ps2)
 
-        
-
-        #print(sample.size)
         if self.transform is not None:
             sample = self.transform(sample)
         if self.target_transform is not None:
