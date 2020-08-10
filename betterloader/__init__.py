@@ -12,17 +12,18 @@ __version__ = "0.1.0"
 __author__ = 'BinIt Inc'
 __credits__ = 'N/A'
 
-from ImageFolderCustom import ImageFolderCustom
+from .ImageFolderCustom import ImageFolderCustom
 import json
 import torch
 import torchvision
+import os
 
 def fetch_json_from_path(path):
-if path != None:
-	with open(path, 'r') as file:
-		return json.load(file)
-else:
-	return None
+	if path != None:
+		with open(path, 'r') as file:
+			return json.load(file)
+	else:
+		return None
 
 def check_valid(subset_json):
     if subset_json == None:
@@ -47,15 +48,22 @@ class BetterLoader:
 		self.subset_json_path = subset_json_path
 		self.index_json_path = index_json_path
 
-	def fetch_segmented_dataloaders(self, batch_size, transform, dataset_metadata = None):
+	def fetch_segmented_dataloaders(self, batch_size, transform=None, dataset_metadata = None):
 		'''Return a 2 element tuple, containing a list of dataloaders (train, test, split) along with a tuple containing their sizes'''
 		
 		train_test_val_instances, class_data, pretransform = dataset_metadata
 
 		index, subset_json = fetch_json_from_path(self.index_json_path), fetch_json_from_path(self.subset_json_path)
 
-		datasets = [ImageFolderCustom(root=self.basepath, transform=transform, is_valid_file=check_valid(
-			subset_json), instance=x, index=index,  train_test_val_instances=train_test_val_instances, class_data=class_data, pretransform = pretransform) for x in ('train', 'test', 'val')]
+		datasets = None
+
+		if transform == None:
+			datasets = [ImageFolderCustom(root=self.basepath, is_valid_file=check_valid(subset_json),
+				instance=x, index=index,  train_test_val_instances=train_test_val_instances, class_data=class_data, pretransform = pretransform) for x in ('train', 'test', 'val')]
+		else:
+			datasets = [ImageFolderCustom(root=self.basepath, transform=transform, is_valid_file=check_valid(subset_json),
+				instance=x, index=index,  train_test_val_instances=train_test_val_instances, class_data=class_data, pretransform = pretransform) for x in ('train', 'test', 'val')]
+		
 		dataloaders = [torch.utils.data.DataLoader(x, batch_size=batch_size, num_workers=self.num_workers, shuffle=True) for x in [
 			datasets[0]]] + [torch.utils.data.DataLoader(x, batch_size=batch_size, num_workers=self.num_workers, shuffle=False) for x in datasets[1:]]
 		

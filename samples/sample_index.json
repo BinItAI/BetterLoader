@@ -1,2 +1,4 @@
-{"class1":["image0.jpg","image2.jpg"],
-"class2":["image3.jpg","image4.jpg"]}
+{
+	"class1":["image0.jpg","image1.jpg"],
+	"class2":["image2.jpg","image3.jpg"]
+}

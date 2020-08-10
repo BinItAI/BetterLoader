@@ -1,8 +1,8 @@
-from BetterLoader import fetch_segmented_dataloader
+from betterloader import BetterLoader
 
-#index needs to be formatted as a dictionary where the keys are the classes and the values are lists where each list item is the required information to use each image
-#the image path is the only neccessary value, but other information can be used
-index_json = 'sample_index.json'
+index_json = './samples/sample_index.json'
+basepath = "./samples/sample_dataset/"
+batch_size = 2
 
 def traintestval(directory, class_to_idx, index, is_valid_file):
     train, test, val = [], [], []
@@ -42,10 +42,9 @@ def pretransform(sample, values):
     return sample,target
   
 def metadata():
-  return traintestval, classdata, pretransform
-  
-    
-basepath = "something/something_else/"
-batch_size = 2
-transform = '' #some pytorch transform
-dataloaders = fetch_segmented_dataloader(basepath, batch_size, transform, num_workers=8, subset_json_path=None, index_json_path=index_json, dataset_metadata = metadata())
+    return traintestval, classdata, pretransform
+
+better_loader = BetterLoader(basepath=basepath, index_json_path=index_json, num_workers=1, subset_json_path=None)
+dataloaders, sizes = better_loader.fetch_segmented_dataloaders(batch_size=batch_size, transform=None, dataset_metadata = metadata())
+
+print("Dataloader sizes: {}".format(str(sizes)))
