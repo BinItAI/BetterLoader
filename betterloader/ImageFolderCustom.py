@@ -92,6 +92,7 @@ class DatasetFolder(VisionDataset):
                  target_transform=None, is_valid_file=None, instance='train', index = None, train_test_val_instances=None, class_data=None,pretransform = None):
         super(DatasetFolder, self).__init__(root, transform=transform,
                                             target_transform=target_transform)
+        self.index = index
         self.class_data = class_data
         self.pretransform = pretransform
         classes, class_to_idx = self._find_classes(self.root)
