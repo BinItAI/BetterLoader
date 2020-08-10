@@ -45,7 +45,7 @@ def make_dataset(directory, class_to_idx, extensions=None, is_valid_file=None,in
         def is_valid_file(x):
             return has_file_allowed_extension(x, extensions)
     
-    train,test,val = train_test_val_instances(directory,class_to_idx,index)
+    train,test,val = train_test_val_instances(directory,class_to_idx,index, is_valid_file)
 
     # train, test, val = [], [], []
     # #import glob
@@ -169,7 +169,7 @@ class DatasetFolder(VisionDataset):
         # classes = [str(x) for x in range(1,23)]
         # classes.sort()
         # class_to_idx = {classes[i]: i for i in range(len(classes))}
-        classes,class_to_idx = self.class_data(dir)
+        classes,class_to_idx = self.class_data(dir,self.index)
 
         return classes, class_to_idx
 
