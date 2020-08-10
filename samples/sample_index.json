@@ -1,2 +1,2 @@
-image0.jpg, target_class0
-image1.jpg, target_class1
+{"class1":["image0.jpg","image2.jpg"],
+"class2":["image3.jpg","image4.jpg"]}
