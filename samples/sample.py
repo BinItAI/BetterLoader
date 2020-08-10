@@ -1,5 +1,4 @@
 from BetterLoader import fetch_segmented_dataloader
-from dataset_metadata import metadata
 
 #index needs to be formatted as a dictionary where the keys are the classes and the values are lists where each list item is the required information to use each image
 #the image path is the only neccessary value, but other information can be used
