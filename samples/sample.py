@@ -1,8 +1,9 @@
 from BetterLoader import fetch_segmented_dataloader
 from dataset_metadata import metadata
 
-
-index_json = 'idx.json'
+#index needs to be formatted as a dictionary where the keys are the classes and the values are lists where each list item is the required information to use each image
+#the image path is the only neccessary value, but other information can be used
+index_json = 'sample_index.json'
 
 def traintestval(directory, class_to_idx, index, is_valid_file):
     train, test, val = [], [], []
@@ -17,6 +18,7 @@ def traintestval(directory, class_to_idx, index, is_valid_file):
             if is_valid_file(file):
                 path = os.path.join(directory,file)
                 # for each item in the instances the first value must be a resolvable path to the image
+                # more data can be added to this tuple, this tuple becomes the values argument in the pretransform
                 item = (path, class_index)
                 instances.append(item)
 
@@ -36,10 +38,15 @@ def classdata(dir, index):
     return classes, class_to_idx
  
 def pretransform(sample, values):
+    # since the tuple we defined in traintestval has the target in the 1 index
     target = values[1]
     return sample,target
   
 def metadata():
   return traintestval, classdata, pretransform
   
+    
+basepath = "something/something_else/"
+batch_size = 2
+transform = '' #some pytorch transform
 dataloaders = fetch_segmented_dataloader(basepath, batch_size, transform, num_workers=8, subset_json_path=None, index_json_path=index_json, dataset_metadata = metadata())
