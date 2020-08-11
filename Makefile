@@ -11,7 +11,11 @@ upload:
 sample:
 	python3 examples/example.py
 
+clean:
+	rm -rf *.egg-info
+	rm -rf dist/
+
 test:
 	python3 tests/tests.py
 
-deploy: sdist upload
+deploy: clean sdist upload
