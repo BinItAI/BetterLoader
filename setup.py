@@ -9,7 +9,7 @@ setup(
     author_email='',
     license='MIT',
     packages=['betterloader'],
-    install_requires=['torchvision>0.4.2','numpy'],
+    install_requires=['future==0.18.2', 'numpy==1.19.1', 'Pillow==7.2.0', 'torch==1.6.0', 'torchvision==0.7.0'],
 
     classifiers=[
         'Development Status :: 3 - Alpha',

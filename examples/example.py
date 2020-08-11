@@ -1,8 +1,8 @@
 from betterloader import BetterLoader
 import os
 
-index_json = './samples/sample_index.json'
-basepath = "./samples/sample_dataset/"
+index_json = './examples/sample_index.json'
+basepath = "./examples/sample_dataset/"
 batch_size = 2
 
 def traintestval(directory, class_to_idx, index, is_valid_file):
@@ -41,11 +41,9 @@ def pretransform(sample, values):
     # since the tuple we defined in traintestval has the target in the 1 index
     target = values[1]
     return sample,target
-  
-def metadata():
-    return traintestval, classdata, pretransform
 
+dataset_metadata = (traintestval, classdata, pretransform)
 better_loader = BetterLoader(basepath=basepath, index_json_path=index_json, num_workers=1, subset_json_path=None)
-dataloaders, sizes = better_loader.fetch_segmented_dataloaders(batch_size=batch_size, transform=None, dataset_metadata = metadata())
+dataloaders, sizes = better_loader.fetch_segmented_dataloaders(batch_size=batch_size, transform=None, dataset_metadata=dataset_metadata)
 
 print("Dataloader sizes: {}".format(str(sizes)))
