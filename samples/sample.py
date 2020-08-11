@@ -1,4 +1,5 @@
 from betterloader import BetterLoader
+import os
 
 index_json = './samples/sample_index.json'
 basepath = "./samples/sample_dataset/"
