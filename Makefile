@@ -8,17 +8,14 @@ run_sample:
 run_test:
 	python3 tests/tests.py
 
-sample:
-	install run_sample
-
-test:
-	install run_test
-
 sdist:
 	python setup.py sdist
 
 upload:
 	twine upload dist/*
 
-deploy:
-	sdist upload
+sample: install run_sample
+
+test: install run_test
+
+deploy: sdist upload
