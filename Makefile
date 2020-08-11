@@ -2,20 +2,16 @@ install:
 	python3 -m pip install --upgrade pip
 	pip3 install -r requirements.txt
 
-run_sample:
-	python3 examples/example.py
-
-run_test:
-	python3 tests/tests.py
-
 sdist:
 	python setup.py sdist
 
 upload:
 	twine upload dist/*
 
-sample: install run_sample
+sample:
+	python3 examples/example.py
 
-test: install run_test
+test:
+	python3 tests/tests.py
 
 deploy: sdist upload
