@@ -7,8 +7,6 @@ BetterLoader is an extension of the default PyTorch dataloader class, that allow
 Check out the BetterLoader docs [here](https://betterloader.readthedocs.io/).
 
 ## Installation
-
-### Pip
 ```sh
 pip install betterloader
 ```
