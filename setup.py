@@ -8,7 +8,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='BetterLoader',
-    version='0.1.1',    
+    version='0.1.2',    
     description='A better PyTorch dataloader',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -16,7 +16,7 @@ setup(
     author='BinIt Inc',
     author_email='',
     license='MIT',
-    download_url="https://github.com/BinItAI/BetterLoader/archive/0.1.1.tar.gz",
+    download_url="https://github.com/BinItAI/BetterLoader/archive/0.1.2.tar.gz",
     packages=['betterloader'],
     install_requires=['future==0.18.2', 'numpy==1.19.1', 'Pillow==7.2.0', 'torch==1.6.0', 'torchvision==0.7.0'],
 
