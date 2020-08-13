@@ -3,15 +3,13 @@
 
 BetterLoader is an extension of the default PyTorch dataloader class, that allows for custom transformations pre-load and image subset definitions. Use the power of custom index files to maintain only a single copy of a dataset with a fixed, flat file structure, and allow BetterLoader to do all the heavy lifting.
 
-## Installation
+## Documentation & Usage
+Check out the BetterLoader docs [here](https://betterloader.readthedocs.io/), or some examples [here](./examples).
 
-### Pip
+## Installation
 ```sh
 pip install betterloader
 ```
-
-## Usage example
-Check out our <a href="./examples">examples</a> folder. The BetterLoader wiki is coming soon!
 
 ## Development setup
 
