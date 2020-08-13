@@ -43,7 +43,7 @@ def pretransform(sample, values):
     return sample,target
 
 dataset_metadata = (traintestval, classdata, pretransform)
-better_loader = BetterLoader(basepath=basepath, index_json_path=index_json, num_workers=1, subset_json_path=None)
-dataloaders, sizes = better_loader.fetch_segmented_dataloaders(batch_size=batch_size, transform=None, dataset_metadata=dataset_metadata)
+better_loader = BetterLoader(basepath=basepath, index_json_path=index_json, num_workers=1, subset_json_path=None, dataset_metadata=dataset_metadata)
+dataloaders, sizes = better_loader.fetch_segmented_dataloaders(batch_size=batch_size, transform=None)
 
 print("Dataloader sizes: {}".format(str(sizes)))

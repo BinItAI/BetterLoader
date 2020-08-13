@@ -36,7 +36,7 @@ def check_valid(subset_json):
     return curry
 
 class BetterLoader:
-	def __init__(self, basepath, index_json_path, num_workers=1, subset_json_path=None):
+	def __init__(self, basepath, index_json_path, num_workers=1, subset_json_path=None, dataset_metadata = None):
 		if not os.path.exists(basepath):
 			raise Exception("Please supply a valid path to your base folder!")
 
@@ -47,11 +47,12 @@ class BetterLoader:
 		self.num_workers = num_workers
 		self.subset_json_path = subset_json_path
 		self.index_json_path = index_json_path
+		self.dataset_metadata = dataset_metadata
 
-	def fetch_segmented_dataloaders(self, batch_size, transform=None, dataset_metadata = None):
+	def fetch_segmented_dataloaders(self, batch_size, transform=None):
 		'''Return a 2 element tuple, containing a list of dataloaders (train, test, split) along with a tuple containing their sizes'''
 		
-		train_test_val_instances, class_data, pretransform = dataset_metadata
+		train_test_val_instances, class_data, pretransform = self.dataset_metadata
 
 		index, subset_json = fetch_json_from_path(self.index_json_path), fetch_json_from_path(self.subset_json_path)
 
