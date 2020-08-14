@@ -38,9 +38,10 @@ def check_valid(subset_json):
         return False
     return curry
 
-def _read_index(split, directory, class_to_idx, index, is_valid_file):
+def _read_index(split, class_to_idx_cb, directory, class_to_idx, index, is_valid_file):
 	train, test, val = [], [], []
 	i = 0
+	class_to_idx_cb(class_to_idx)
 	for target_class in sorted(class_to_idx.keys()):
 		i += 1
 		class_index = class_to_idx[target_class]
@@ -74,8 +75,21 @@ class BetterLoader:
 		self.num_workers = num_workers
 		self.subset_json_path = subset_json_path
 		self.index_json_path = index_json_path
+		self.class_to_idx = {}
 		self.dataset_metadata = None if dataset_metadata == None else {i:dataset_metadata[i] for i in dataset_metadata if i!='split'}
 		self.split = dataset_metadata["split"] if "split" in dataset_metadata else (0.6, 0.2, 0.2)
+
+	def _verify_class_to_idx_map(self, idx_map):
+		if not self.class_to_idx == idx_map:
+			print("WARNING: Found classes differ between train/test/val splits. Assigning most recent class mapping...")
+
+
+	def _set_class_to_idx(self, idx_map):
+		if self.class_to_idx == {}:
+			self.class_to_idx = idx_map
+		else:
+			self._verify_class_to_idx_map(idx_map)
+			self.class_to_idx = idx_map
 
 	def _fetch_metadata(self, key):
 		if key in self.dataset_metadata:
@@ -95,7 +109,7 @@ class BetterLoader:
 
 		datasets = None
 
-		train_test_val_instances_wrap = lambda directory, class_to_idx, index, is_valid_file: train_test_val_instances(self.split, directory, class_to_idx, index, is_valid_file)
+		train_test_val_instances_wrap = lambda directory, class_to_idx, index, is_valid_file: train_test_val_instances(self.split, self._set_class_to_idx, directory, class_to_idx, index, is_valid_file)
 
 		if transform == None:
 			datasets = [ImageFolderCustom(root=self.basepath, is_valid_file=check_valid(subset_json),
@@ -120,3 +134,6 @@ class BetterLoader:
 		}
 
 		return loaders, sizes
+
+	def fetch_class_info(self):
+		return self.class_to_idx.keys(), self.class_to_idx
