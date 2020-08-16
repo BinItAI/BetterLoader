@@ -182,7 +182,12 @@ def default_loader(path):
     else:
         return pil_loader(path)
 
-
+def default_classdata(dir, index):
+    classes = list(index.keys())
+    classes.sort()
+    class_to_idx = {classes[i]: i for i in range(len(classes))}
+    return classes, class_to_idx
+    
 class ImageFolderCustom(DatasetFolder):
     """A generic data loader where the images are arranged in this way: ::
 
@@ -211,7 +216,7 @@ class ImageFolderCustom(DatasetFolder):
     """
 
     def __init__(self, root, transform=None, target_transform=None,
-                 loader=default_loader, is_valid_file=None, instance = 'train',index = None, train_test_val_instances=None, class_data=None, pretransform = None):
+                 loader=default_loader, is_valid_file=None, instance = 'train',index = None, train_test_val_instances=None, class_data=default_classdata(), pretransform = None):
         super(ImageFolderCustom, self).__init__(root, loader, IMG_EXTENSIONS if is_valid_file is None else None,
                                           transform=transform,
                                           target_transform=target_transform,
