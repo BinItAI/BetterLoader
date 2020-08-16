@@ -1,4 +1,5 @@
 alabaster==0.7.12
+autopep8==1.5.4
 Babel==2.8.0
 bleach==3.1.5
 certifi==2020.6.20
@@ -16,6 +17,7 @@ numpy==1.19.1
 packaging==20.4
 Pillow==7.2.0
 pkginfo==1.5.0.1
+pycodestyle==2.6.0
 Pygments==2.6.1
 pyparsing==2.4.7
 pytz==2020.1
@@ -32,6 +34,7 @@ sphinxcontrib-htmlhelp==1.0.3
 sphinxcontrib-jsmath==1.0.1
 sphinxcontrib-qthelp==1.0.3
 sphinxcontrib-serializinghtml==1.1.4
+toml==0.10.1
 torch==1.6.0
 torchvision==0.7.0
 tqdm==4.48.2
