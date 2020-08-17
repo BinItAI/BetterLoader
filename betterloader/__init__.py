@@ -72,11 +72,11 @@ class BetterLoader:
     	num_workers (int, optional): Number of workers
     	subset_json_path (string, optional): Path to subset json
     	dataset_metadata (dict, optional): Optional metadata parameters.
-    		Metadata keys
-			pretransform: (callable, optional) Define a custom pretransform before images are loaded into the dataloader and transformed
-			classdata: (callable, optional) Define a custom mapping for a custom format sample file to read data from the DatasetFolder class.
-			split: (dict, optional) Tuple for train, test, val values - must add to 1
-			train_test_val_instances: (callable, optional) Custom function to read values from the index file
+    		Key-value pairs:
+				pretransform: (callable, optional) Define a custom pretransform before images are loaded into the dataloader and transformed
+				classdata: (callable, optional) Define a custom mapping for a custom format sample file to read data from the DatasetFolder class.
+				split: (dict, optional) Tuple for train, test, val values - must add to 1
+				train_test_val_instances: (callable, optional) Custom function to read values from the index file
 
      Attributes:
         classes (list): List of the class names sorted alphabetically.
@@ -101,6 +101,11 @@ class BetterLoader:
 
 
 	def _set_class_data(self, datasets):
+		'''Wrapper to set class data values upon processing datasets
+		Args:
+			datasets (list): datasets that have been processed
+		'''
+		
 		if not (all(x.classes == datasets[0].classes for x in datasets) and all(x.class_to_idx == datasets[0].class_to_idx for x in datasets)):
 			print("Class mismatch between the train/test/val data. This is usually caused by an uneven split, or a lack of the presence of identical classes in train/test/val. Assigning train data class names and class_to_idx map.")
 
@@ -108,6 +113,14 @@ class BetterLoader:
 		self.class_to_idx = datasets[0].class_to_idx
 
 	def _fetch_metadata(self, key):
+		'''Wrapper to fetch a value from the dataset metadata
+		Args:
+			key (string): Key that we're trying to fetch
+
+		Returns:
+			vaule (var): Value for that key - if such a key does not exist, return None
+		'''
+
 		if key in self.dataset_metadata:
 			return self.dataset_metadata[key]
 		else:
@@ -120,7 +133,7 @@ class BetterLoader:
 	    	batch_size (string): Image batch size.
 	    	transform (callable, optional): PyTorch transform object
 
-	     Return:
+	     Returns:
 	        loaders (dict): A dictionary of dataloaders for train test split
 	        sizes (dict): A dictionary of dataset sizes for train test split
 	    """

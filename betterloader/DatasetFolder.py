@@ -28,9 +28,6 @@ def is_image_file(filename):
     """
     return has_file_allowed_extension(filename, IMG_EXTENSIONS)
 
-#def cat_from_path(path):
-#    return path[path.rfind('_',0,path.rfind('_')-1)+1:path.rfind('_')]
-
 
 def default_pretransform(sample, values):
     # since the tuple we defined in traintestval has the target in the 1 index
