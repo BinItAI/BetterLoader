@@ -5,17 +5,10 @@
 
 Welcome to BetterLoader's documentation!
 ========================================
-This is definitely a work in progress, but we'll get there someday :)
+
+.. automodule:: betterloader.__init__
+    :members:
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
