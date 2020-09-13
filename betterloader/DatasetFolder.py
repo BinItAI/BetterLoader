@@ -80,12 +80,25 @@ class DatasetFolder(VisionDataset):
         is_valid_file (callable, optional): A function that takes path of a file
             and check if the file is a valid file (used to check of corrupt files)
             both extensions and is_valid_file should not be passed.
+        instance (sting, optional): Either 'train' 'test' or 'val' whether or not you want the train test or val split
+        index (dict[string:list[string]], optional): A dictionary that maps each class to a list of the image paths for that class along with whetever other data you need to make your dataset
+            this can really be whatever you want because it is only handled by train_test_val_instances.
+        train_test_val_instances (callable, optional): A function that takes:
+            a root directory,
+            a mapping of class names to indeces, 
+            the index,
+            and is_valid_file
+            and returns a tuple of lists containing the instance data for each of train test and val, 
+            the instance data in the list is a tuple and can have whatever structure you want as long as the image path is the first element
+                each of these tuples is processed by the pretransform
+        class_data (tuple, optional): the first element is a list of the classes, the second is a mapping of the classes to their indeces
+        pretransform (callable, optional): A function that takes the loaded image and any other relevant data for that image and returns a transformed version of that image
 
      Attributes:
         classes (list): List of the class names sorted alphabetically.
         class_to_idx (dict): Dict with items (class_name, class_index).
         samples (list): List of (sample path, class_index) tuples
-        targets (list): The class_index value for each image in the dataset
+        Unused: targets (list): The class_index value for each image in the dataset 
     """
 
     def __init__(self, root, loader, extensions, transform,
