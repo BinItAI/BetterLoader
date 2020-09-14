@@ -24,15 +24,8 @@ make sample
 make test
 ```
 
-## Release History
-* 0.0.1
-    * Work in progress
-
 ## Meta
 Distributed under the MIT license. See ``LICENSE`` for more information.
-
-## Todo
-There are a ton of open issues! Do check them out if you would like to contribute
 
 ## Documentation & Usage
 - [Usage docs](https://betterloader.readthedocs.io/)
