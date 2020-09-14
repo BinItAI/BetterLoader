@@ -62,8 +62,8 @@ def default_classdata(_, index):
     classes.sort()
     class_to_idx = {classes[i]: i for i in range(len(classes))}
     return classes, class_to_idx
-    
-class ImageFolderCustom(DatasetFolder):
+
+class ImageFolderCustom(DatasetFolder): # pylint: disable=too-few-public-methods
     """A generic data loader for images ::
 
     Args:
