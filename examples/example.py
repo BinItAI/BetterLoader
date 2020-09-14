@@ -1,3 +1,6 @@
+# This example uses the default parameters
+# The structure of the index file can be any json as long as you change the other parameters to work with that
+
 from betterloader import BetterLoader
 import os
 

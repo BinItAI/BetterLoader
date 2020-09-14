@@ -9,7 +9,6 @@ from .DatasetFolder import DatasetFolder
 
 IMG_EXTENSIONS = ('.jpg', '.jpeg', '.png', '.ppm', '.bmp', '.pgm', '.tif', '.tiff', '.webp')
 
-
 def pil_loader(path):
     """open path as file to avoid ResourceWarning (https://github.com/python-pillow/Pillow/issues/835)
     Args:
@@ -63,17 +62,9 @@ def default_classdata(_, index):
     classes.sort()
     class_to_idx = {classes[i]: i for i in range(len(classes))}
     return classes, class_to_idx
-
-class ImageFolderCustom(DatasetFolder): # pylint: disable=too-few-public-methods
-    """A generic data loader where the images are arranged in this way: ::
-
-        root/dog/xxx.png
-        root/dog/xxy.png
-        root/dog/xxz.png
-
-        root/cat/123.png
-        root/cat/nsdf3.png
-        root/cat/asd932_.png
+    
+class ImageFolderCustom(DatasetFolder):
+    """A generic data loader for images ::
 
     Args:
         root (string): Root directory path.
@@ -84,6 +75,19 @@ class ImageFolderCustom(DatasetFolder): # pylint: disable=too-few-public-methods
         loader (callable, optional): A function to load an image given its path.
         is_valid_file (callable, optional): A function that takes path of an Image file
             and check if the file is a valid file (used to check of corrupt files)
+        instance (sting, optional): Either 'train' 'test' or 'val' whether or not you want the train test or val split
+        index (dict[string:list[string]], optional): A dictionary that maps each class to a list of the image paths for that class along with whetever other data you need to make your dataset
+            this can really be whatever you want because it is only handled by train_test_val_instances.
+        train_test_val_instances (callable, optional): A function that takes:
+            a root directory,
+            a mapping of class names to indeces, 
+            the index,
+            and is_valid_file
+            and returns a tuple of lists containing the instance data for each of train test and val, 
+            the instance data in the list is a tuple and can have whatever structure you want as long as the image path is the first element
+                each of these tuples is processed by the pretransform
+        class_data (tuple, optional): the first element is a list of the classes, the second is a mapping of the classes to their indeces
+        pretransform (callable, optional): A function that takes the loaded image and any other relevant data for that image and returns a transformed version of that image
 
      Attributes:
         classes (list): List of the class names sorted alphabetically.
