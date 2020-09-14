@@ -30,6 +30,7 @@ def is_image_file(filename):
 
 
 def default_pretransform(sample, values):
+    # does not transform the sample
     # since the tuple we defined in traintestval has the target in the 1 index
     target = values[1]
     return sample,target
@@ -57,16 +58,8 @@ def make_dataset(directory, class_to_idx, extensions=None, is_valid_file=None,in
 
 
 class DatasetFolder(VisionDataset):
-    """A generic data loader where the samples are arranged in this way: ::
-
-        root/class_x/xxx.ext
-        root/class_x/xxy.ext
-        root/class_x/xxz.ext
-
-        root/class_y/123.ext
-        root/class_y/nsdf3.ext
-        root/class_y/asd932_.ext
-
+    """A generic data loader ::
+    
     Args:
         root (string): Root directory path.
         loader (callable): A function to load a sample given its path.
@@ -97,7 +90,9 @@ class DatasetFolder(VisionDataset):
      Attributes:
         classes (list): List of the class names sorted alphabetically.
         class_to_idx (dict): Dict with items (class_name, class_index).
-        samples (list): List of (sample path, class_index) tuples
+        pretransform (callable): returns a transformed image using data in the sample
+        class_data (tuple): (classes, class_to_idx)
+        samples (tuple): tuple of three (train test val) lists of (sample path, class_index, whatever else, ...) tuples
         Unused: targets (list): The class_index value for each image in the dataset 
     """
 
