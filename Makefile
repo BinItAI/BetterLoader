@@ -2,7 +2,7 @@ install:
 	python3 -m pip install --upgrade pip
 	pip3 install -r requirements.txt
 
-sdist:
+docs:
 	python setup.py sdist
 
 upload:
@@ -18,4 +18,4 @@ clean:
 test:
 	python3 tests/tests.py
 
-deploy: clean sdist upload
+deploy: clean docs upload
