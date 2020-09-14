@@ -1,8 +1,12 @@
-from torchvision.datasets import VisionDataset
-import numpy as np
+"""
+Modified version of the PyTorch DatasetFolder class to make custom dataloading possible
+
+"""
 
 import os
 import os.path
+
+from torchvision.datasets import VisionDataset
 
 def has_file_allowed_extension(filename, extensions):
     """Checks if a file is an allowed extension.
@@ -16,26 +20,33 @@ def has_file_allowed_extension(filename, extensions):
     """
     return filename.lower().endswith(extensions)
 
-
-def is_image_file(filename):
-    """Checks if a file is an allowed image extension.
-
+def default_pretransform(sample, values):
+    """Returns the image sample without transforming it at all
     Args:
-        filename (string): path to a file
+        sample: Loaded image data
+        values: Tuple such that the 1th arguement is the target (defined by default)
 
     Returns:
-        bool: True if the filename ends with a known image extension
+        var: The loaded sample image
+        int: Value representing the image class (label for data)
     """
-    return has_file_allowed_extension(filename, IMG_EXTENSIONS)
-
-
-def default_pretransform(sample, values):
-    # since the tuple we defined in traintestval has the target in the 1 index
     target = values[1]
-    return sample,target
+    return sample, target
 
-def make_dataset(directory, class_to_idx, extensions=None, is_valid_file=None,instance='train',index=None,train_test_val_instances = None):
-    #instances = []
+def make_dataset(directory, class_to_idx, extensions=None, is_valid_file=None, instance='train', index=None, train_test_val_instances = None):
+    """Makes the actual dataset
+    Args:
+        directory (string): Root directory path.
+        class_to_idx (dict): Dict which maps classes to index values
+        extensions (tuple[string]): A list of allowed extensions. both extensions and is_valid_file should not be passed.
+        is_valid_file (callable, optional): A function that takes path of a file and check if the file is a valid file (used to check of corrupt files) both extensions and is_valid_file should not be passed.
+        instance (str): String signifying data segment (train, test, val)
+        index (dict): Index file dict data
+        train_test_val_instances (callable, optional): Returns custom breakup for train, test, val data
+
+    Returns:
+        list: List of PyTorch instance data to be loaded
+    """
     directory = os.path.expanduser(directory)
     both_none = extensions is None and is_valid_file is None
     both_something = extensions is not None and is_valid_file is not None
@@ -44,17 +55,10 @@ def make_dataset(directory, class_to_idx, extensions=None, is_valid_file=None,in
     if extensions is not None:
         def is_valid_file(x):
             return has_file_allowed_extension(x, extensions)
-    
-    train,test,val = train_test_val_instances(directory,class_to_idx,index, is_valid_file)
 
-    if instance == 'train':
-        return train
-    if instance == 'test':
-        return test
-    else:
-        return val
-    #return instances
+    train, test, val = train_test_val_instances(directory,class_to_idx,index, is_valid_file)
 
+    return train if instance == 'train' else test if instance == 'test' else val
 
 class DatasetFolder(VisionDataset):
     """A generic data loader where the samples are arranged in this way: ::
@@ -96,12 +100,9 @@ class DatasetFolder(VisionDataset):
                                             target_transform=target_transform)
         self.index = index
         self.class_data = class_data
-        self.pretransform = default_pretransform if pretransform == None else pretransform
+        self.pretransform = default_pretransform if pretransform is None else pretransform
         classes, class_to_idx = self._find_classes(self.root)
         samples = make_dataset(self.root, class_to_idx, extensions, is_valid_file, instance, index, train_test_val_instances)
-        '''if len(samples) == 0:
-            raise (RuntimeError("Found 0 files in subfolders of: " + self.root + "\n"
-                                "Supported extensions are: " + ",".join(extensions)))'''
 
         self.loader = loader
         self.extensions = extensions
@@ -111,12 +112,12 @@ class DatasetFolder(VisionDataset):
         self.samples = samples
         self.targets = [s[1] for s in samples]
 
-    def _find_classes(self, dir):
+    def _find_classes(self, root_dir):
         """
         Finds the class folders in a dataset.
 
         Args:
-            dir (string): Root directory path.
+            root_dir (string): Root directory path.
 
         Returns:
             tuple: (classes, class_to_idx) where classes are relative to (dir), and class_to_idx is a dictionary.
@@ -125,7 +126,7 @@ class DatasetFolder(VisionDataset):
             No class is a subdirectory of another.
         """
 
-        classes,class_to_idx = self.class_data(dir,self.index)
+        classes,class_to_idx = self.class_data(root_dir, self.index)
 
         return classes, class_to_idx
 

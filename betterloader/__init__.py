@@ -1,23 +1,30 @@
 """
-Adding Hypercustomizability to the Pytorch ImageFolder Dataloader. 
+Adding Hypercustomizability to the Pytorch ImageFolder Dataloader.
 id est: making it harder to do easy things, but easier to do harder things :)
 
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.3"
 __author__ = 'BinIt Inc'
 __credits__ = 'N/A'
 
-from .ImageFolderCustom import ImageFolderCustom
 import json
-import torch
-import torchvision
 import os
 from collections import defaultdict
 
+import torch
+import torchvision
+
+from .ImageFolderCustom import ImageFolderCustom
 
 def fetch_json_from_path(path):
-    if path != None:
+    """Helper method to fetch json dict from file
+    Args:
+        path: Path to fetch json dict
+    Returns:
+        dict: JSON object stored in file at path
+    """
+    if path is not None:
         with open(path, 'r') as file:
             return json.load(file)
     else:
@@ -25,7 +32,13 @@ def fetch_json_from_path(path):
 
 
 def check_valid(subset_json):
-    if subset_json == None:
+    """Helper to check if a file is valid, given a subset json instance
+    Args:
+        subset_json: Defined subset json file data
+    Returns:
+        bool: True/false value for validity
+    """
+    if subset_json is None:
         return lambda path: True
 
     def curry(image_path):
@@ -35,24 +48,30 @@ def check_valid(subset_json):
     return curry
 
 
-def read_index_default(split, directory, class_to_idx, index, is_valid_file):
+def read_index_default(split, directory, class_to_idx, index, is_valid_file): # pylint: disable=too-many-locals
+    """Function to perform default train/test/val instance creation
+    Args:
+        split (tuple): Tuple of ratios (from 0 to 1) for train, test, val values
+        directory (str): Parent directory to read images from
+        class_to_idx (dict): Dictionary to map values from class strings to index values
+        index (dict): Index file dict object
+        is_valid_file (callable): Function to verify if a file should be loaded
+    Returns:
+        (tuple): Tuple of length 3 containing train, test, val instances
+    """
     train, test, val = [], [], []
     i = 0
     for target_class in sorted(class_to_idx.keys()):
         i += 1
-        class_index = class_to_idx[target_class]
         if not os.path.isdir(directory):
             continue
         instances = []
         for file in index[target_class]:
             if is_valid_file(file):
                 path = os.path.join(directory, file)
-                # for each item in the instances the first value must be a resolvable path to the image
-                # more data can be added to this tuple, this tuple becomes the values argument in the pretransform
-                item = (path, class_index)
-                instances.append(item)
+                instances.append((path, class_to_idx[target_class]))
 
-        trainp, testp, valp = split
+        trainp, _, valp = split
 
         train += instances[:int(len(instances)*trainp)]
         test += instances[int(len(instances)*trainp):int(len(instances)*(1-valp))]
@@ -60,7 +79,7 @@ def read_index_default(split, directory, class_to_idx, index, is_valid_file):
     return train, test, val
 
 
-class BetterLoader:
+class BetterLoader: # pylint: disable=too-few-public-methods
     """A hypercustomisable Python dataloader
 
     Args:
@@ -86,7 +105,7 @@ class BetterLoader:
         split (tuple): Tuple of train test val float values
     """
 
-    def __init__(self, basepath, index_json_path, num_workers=1, subset_json_path=None, dataset_metadata={}):
+    def __init__(self, basepath, index_json_path, num_workers=1, subset_json_path=None, dataset_metadata=None):
         if not os.path.exists(basepath):
             raise Exception("Please supply a valid path to your base folder!")
 
@@ -100,7 +119,7 @@ class BetterLoader:
         self.index_json_path = index_json_path
         self.classes = []
         self.class_to_idx = {}
-        self.dataset_metadata = None if dataset_metadata == None else {
+        self.dataset_metadata = None if dataset_metadata is None else {
             i: dataset_metadata[i] for i in dataset_metadata if i != 'split'}
         self.split = dataset_metadata["split"] if "split" in dataset_metadata else (
             0.6, 0.2, 0.2)
@@ -128,8 +147,8 @@ class BetterLoader:
 
         if key in self.dataset_metadata:
             return self.dataset_metadata[key]
-        else:
-            return None
+
+        return None
 
     def fetch_segmented_dataloaders(self, batch_size, transform=None):
         """Fetch custom dataloaders, which may be used with any PyTorch model
@@ -144,9 +163,9 @@ class BetterLoader:
         """
 
         train_test_val_instances, class_data, pretransform = self._fetch_metadata(
-            "train_test_val_instances"), self._fetch_metadata("classdata"), self._fetch_metadata("pretransform")
+"train_test_val_instances"), self._fetch_metadata("classdata"), self._fetch_metadata("pretransform")
 
-        if train_test_val_instances == None:
+        if train_test_val_instances is None:
             train_test_val_instances = read_index_default
 
         index, subset_json = fetch_json_from_path(
@@ -154,10 +173,10 @@ class BetterLoader:
 
         datasets = None
 
-        def train_test_val_instances_wrap(directory, class_to_idx, index, is_valid_file): return train_test_val_instances(
-            self.split, directory, class_to_idx, index, is_valid_file)
+        def train_test_val_instances_wrap(directory, class_to_idx, index, is_valid_file):
+            return train_test_val_instances(self.split, directory, class_to_idx, index, is_valid_file)
 
-        if transform == None:
+        if transform is None:
             datasets = [ImageFolderCustom(root=self.basepath, is_valid_file=check_valid(subset_json),
                                           instance=x, index=index,  train_test_val_instances=train_test_val_instances_wrap, class_data=class_data, pretransform=pretransform) for x in ('train', 'test', 'val')]
         else:

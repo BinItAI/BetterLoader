@@ -18,4 +18,7 @@ clean:
 test:
 	python3 tests/tests.py
 
+lint:
+	pylint ./betterloader/
+
 deploy: clean docs upload
