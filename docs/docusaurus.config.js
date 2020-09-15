@@ -5,7 +5,7 @@ module.exports = {
   baseUrl: '/betterloader/',
   onBrokenLinks: 'throw',
   favicon: 'img/favicon.ico',
-  organizationName: 'BinIt',
+  organizationName: 'BinItAI',
   projectName: 'BetterLoader',
   themeConfig: {
     navbar: {
