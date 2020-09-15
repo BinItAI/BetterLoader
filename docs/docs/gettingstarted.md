@@ -1,5 +1,5 @@
 ---
-id: doc1
+id: gettingstarted
 title: Getting Started
 sidebar_label: Getting Started
 slug: /
@@ -17,7 +17,8 @@ pip install betterloader
 For developers, BetterLoader's source may also be found at our [Github repository](https://github.com/BinItAI/BetterLoader). You can also install BetterLoader from source, but if you're just trying to use the package, pip is probably a far better bet.
 
 ## Usage
-BetterLoader really shines when you're working with a dataset, and you want to load subsets of image classes conditionally. Say you have 3 folders of images, and you only want to load those images that conform to a specific condition, <b>or</b> those that are present in a pre-defined subset file. What if you want to load a specific set of crops per source image, given a set of source images? BetterLoader can do all this, and more.
+BetterLoader really shines when you're working with a dataset, and you want to load subsets of image classes conditionally. Say you have 3 folders of images, and you only want to load those images that conform to a specific condition, <b>or</b> those that are present in a pre-defined subset file. What if you want to load a specific set of crops per source image, given a set of source images? BetterLoader can do all this, and more.<br />
+<b>Note:</b> BetterLoader currently only supports supervised deep learning tasks. Unsupervised learning support coming soon!
 
 ### Basic Usage
 Using BetterLoader with its default parameters lets it function just like the regular Python dataloader. A few points worth noting are that:

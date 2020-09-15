@@ -1,5 +1,5 @@
 module.exports = {
   someSidebar: {
-    BetterLoader: ['doc1', 'doc2'],
+    BetterLoader: ['gettingstarted', 'files'],
   },
 };
