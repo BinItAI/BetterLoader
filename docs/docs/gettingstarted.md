@@ -23,7 +23,7 @@ BetterLoader really shines when you're working with a dataset, and you want to l
 ### Basic Usage
 Using BetterLoader with its default parameters lets it function just like the regular Python dataloader. A few points worth noting are that:
 - BetterLoader does not expect a nested folder structure. In its current iteration, files are expected to all be present in the root directory. This lets us use index files to define classes and labels dynamically, and vary them from experiment to experiment.
-- <b>Every</b> instance of BetterLoader requires an index file to function. The index file maps ipmages to their class values. As of now, index files are simply filenames, but we can potentially add support for regex/more complicated logical expressions down the road. Sample index files may be found <a href="/docs/files">here</a>.
+- <b>Every</b> instance of BetterLoader requires an index file to function. The default index file format maps class names to a list of image paths, but the index file can be any json file as long as you modify train_test_val_instances to parse it correctly. Sample index files may be found <a href="/docs/files">here</a>.
 
 A sample use-case for BetterLoader may be found below. It's worth noting that at this point in time, the BetterLoader class has only one callable function.
 ```python
