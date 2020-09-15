@@ -2,9 +2,6 @@ install:
 	python3 -m pip install --upgrade pip
 	pip3 install -r requirements.txt
 
-deploy-docs:
-	cd docs && GIT_USER=$(GIT_USER) USE_SSH=true yarn deploy
-
 upload:
 	twine upload dist/*
 
@@ -18,4 +15,4 @@ clean:
 test:
 	python3 tests/tests.py
 
-deploy: clean deploy-docs upload
+deploy: clean upload
