@@ -1,6 +1,6 @@
 module.exports = {
   title: 'BetterLoader',
-  tagline: 'The augmented Python dataloader',
+  tagline: 'The augmented PyTorch dataloader',
   url: 'https://binitai.github.io',
   baseUrl: '/betterloader/',
   onBrokenLinks: 'throw',
@@ -50,16 +50,12 @@ module.exports = {
           items: [
             {
               label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              href: 'https://stackoverflow.com/questions/tagged/betterloader',
             },
             {
               label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
-              label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
-            },
+              href: 'https://discord.gg/T4Hxcq6',
+            }
           ],
         }
       ],
