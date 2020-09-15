@@ -2,7 +2,7 @@ module.exports = {
   title: 'BetterLoader',
   tagline: 'The augmented PyTorch dataloader',
   url: 'https://binitai.github.io',
-  baseUrl: '/betterloader/',
+  baseUrl: '/BetterLoader/',
   onBrokenLinks: 'throw',
   favicon: 'img/favicon.ico',
   organizationName: 'BinItAI',
@@ -23,7 +23,7 @@ module.exports = {
         },
         {to: 'blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/binitai/betterloader',
+          href: 'https://github.com/binitai/BetterLoader',
           label: 'GitHub',
           position: 'right',
         },
@@ -46,7 +46,7 @@ module.exports = {
           items: [
             {
               label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/betterloader',
+              href: 'https://stackoverflow.com/questions/tagged/BetterLoader',
             },
             {
               label: 'Discord',
@@ -66,7 +66,7 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/binitai/betterloader',
+            'https://github.com/binitai/BetterLoader',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
