@@ -12,18 +12,12 @@ about: Improves documentation for the API or on the docs website.
 
 <!--- Describe how you have validated your documentation additions:
 
-1. Run `make docs` from the project root to regenerate the API documentation
-   from source.
-
-2. Inside the `/docs` subdirectory, run `make html` to generate the
-   documentation site, and validate that your documentation is formatted
-   and styled correctly.
+1. Run `yarn start` within the `docs/` folder in order to verify your change to the API documentation. Please validate that your documentation is formatted and styled correctly.
 
 -->
 
 - [ ] I have linted, spell-checked, and grammar-checked my documentation additions.
-- [ ] I have run `make docs` to regenerate the API documentation from source.
-- [ ] Within `/docs`, I have validated the changes to the documentation after running `make html` within the directory
+- [ ] Within `/docs`, I have validated the changes to the documentation after running `yarn start` within the directory
 - [ ] My additions are styled and structured correctly on documentation site
 
 ## Checklist
