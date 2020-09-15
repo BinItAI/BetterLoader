@@ -1,12 +1,12 @@
 module.exports = {
   title: 'BetterLoader',
   tagline: 'The augmented Python dataloader',
-  url: 'https://github.com/binitai/betterloader',
-  baseUrl: '/',
+  url: 'https://binitai.github.io',
+  baseUrl: '/betterloader/',
   onBrokenLinks: 'throw',
   favicon: 'img/favicon.ico',
-  organizationName: 'BinIt', // Usually your GitHub org/user name.
-  projectName: 'BetterLoader', // Usually your repo name.
+  organizationName: 'BinIt',
+  projectName: 'BetterLoader',
   themeConfig: {
     navbar: {
       title: 'BetterLoader',
