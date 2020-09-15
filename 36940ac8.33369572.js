@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[5],{63:function(t){t.exports=JSON.parse('{"allTagsPath":"/betterloader/blog/tags","slug":"binit","name":"binit","count":1,"permalink":"/betterloader/blog/tags/binit"}')}}]);
