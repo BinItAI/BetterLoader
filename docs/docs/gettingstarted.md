@@ -65,23 +65,25 @@ BetterLoader accepts certain key value pairs as dataset metadata, in order to en
 
 ---
 
-Here is an example of a `pretransform` and a `train_test_val_instances` designed to allow for a specified crop to be taken of each image. The internals of the loader dictate that the elements of the `instances` variable from train_test_val_instances will become the `values` argument for pretransform, and the `sample` argument for pretransform is the image data loaded directly from the filepath in `values[0]` (or `instances[i][0]`).
+Here is an example of a `pretransform` and a `train_test_val_instances` designed to allow for a specified crop to be taken of each image.
+<b>Notes</b>:
 
-Since the index file here has a similar structure to the default we can get away with using the default classdata function, but index files that don't have the classes as keys of a dictionary will need a custom way of determining the classes.
+- The internals of the loader dictate that the elements of the `instances` variables generated from train_test_val_instances will become the `values` argument for a pretransform call, and the `sample` argument for pretransform is the image data loaded directly from the filepath in `values[0]` (or `instances[i][0]`).
+- Since the index file here has a similar structure to the default we can get away with using the default classdata function, but index files that don't have the classes as keys of a dictionary will need a custom way of determining the classes.
 
 ```python
 def pretransform(sample, values):
-    """Example pretransform
-    takes an image and crops it based on the parameters defined in values[2]
+    """Example pretransform - takes an image and crops it based on the parameters defined in values
+    Args:
+        values (tuple): Tuple of values relevant to a given image - created by the train_test_val_instances function
+
+    Returns:
+        tuple: Actual modified image, and the target class index for that image
     """
-    image_path = values[0] #this is unused, but the image path is always values[0]
-    target = values[1]
-    crop_params = values[2]
+    image_path, target, crop_params = values
     
-    cropped_sample = some_crop_function(sample,crop_params)
-    
-    #the return should always have this structure (some image data, some target class index)
-    return (cropped_sample,target)
+    # pretransform should always return a tuple of this structure (some image data, some target class index)
+    return (_crop(sample, crop_params), target)
     
 ```
 
