@@ -8,6 +8,28 @@ BetterLoader is an extension of the default PyTorch dataloader class, that allow
 pip install betterloader
 ```
 
+## Usage
+BetterLoader allows you to dynamically assign images to labels, load subsets of images conditionally, perform custom pretransforms before loading an image, and much more. 
+
+### Basic Usage
+A few points worth noting are that:
+- BetterLoader does not expect a nested folder structure. In its current iteration, files are expected to all be present in the root directory.
+- <b>Every</b> instance of BetterLoader requires an index file to function. Sample index files may be found <a href="https://binitai.github.io/BetterLoader/docs/files">here</a>.
+
+```python
+from betterloader import BetterLoader
+
+index_json = './examples/sample_index.json'
+basepath = "./examples/sample_dataset/"
+batch_size = 2
+
+loader = BetterLoader(basepath=basepath, index_json_path=index_json)
+dataloaders, sizes = loader.fetch_segmented_dataloaders(batch_size=batch_size, transform=None)
+
+print("Dataloader sizes: {}".format(str(sizes)))
+```
+For more information and more detailed examples, please check out <a href="https://binitai.github.io/BetterLoader/">the BetterLoader docs</a>!
+
 ## Development setup
 
 We use <a href="https://opensource.com/article/18/8/what-how-makefile">Makefile</a> to make our lives a little easier :)
@@ -28,6 +50,6 @@ make test
 Distributed under the MIT license. See ``LICENSE`` for more information.
 
 ## Documentation & Usage
-- [Usage docs](https://betterloader.readthedocs.io/)
+- [Usage docs](https://binitai.github.io/BetterLoader/)
 - [Example implementation](./examples)
 - [Contributing](./CONTRIBUTING.md)
