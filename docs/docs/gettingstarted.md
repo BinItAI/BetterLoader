@@ -51,6 +51,73 @@ print("Dataloader sizes: {}".format(str(sizes)))
 #### Dataset Metadata
 BetterLoader accepts certain key value pairs as dataset metadata, in order to enable some custom functionality.
 1. pretransform (callable, optional): This allows us to load a custom pretransform before images are loaded into the dataloader and transformed.
+  For basic usage a pretransform that does not do anything (the default) is usually sufficient. An example use case for the customizability is listed below.
 2. classdata (callable, optional): Defines a custom mapping for a custom format index file to read data from the DatasetFolder class.
+  Since the index file may have any structure we need to ensure that the classes and a mapping from the classes to the index are always available.
+  Returns a tuple (list of classes, dictionary mapping of class to index)
 3. split (tuple, optional): Defines a tuple for train, test, val values which must add to one.
-4. train_test_val_instances (callable, optional): Defines a custom function to read values from the index file
+4. train_test_val_instances (callable, optional): Defines a custom function to read values from the index file.
+  The default expects an index that is a dict mapping classes to a list of file paths, will need to be written custom for different index formats.
+  Always must return train test and val splits, which each need to be a list of tuples, each tuple corresponding to one datapoint.
+  The first element of this tuple must also be the filepath of the image for that datapoint.
+  The default also has the target class index as the second element of this tuple, this is probably good for most use cases.
+  Each of these datapoint tuples is passed as the `values` argument in the pretransform, any additional data necessary for transforming the datapoint before it is loaded can go in the datapoint tuple.
+
+---
+
+Here is an example of a `pretransform` and a `train_test_val_instances` designed to allow for a specified crop to be taken of each image. The internals of the loader dictate that the elements of the `instances` variable from train_test_val_instances will become the `values` argument for pretransform, and the `sample` argument for pretransform is the image data loaded directly from the filepath in `values[0]` (or `instances[i][0]`).
+
+Since the index file here has a similar structure to the default we can get away with using the default classdata function, but index files that don't have the classes as keys of a dictionary will need a custom way of determining the classes.
+
+```python
+def pretransform(sample, values):
+    """Example pretransform
+    takes an image and crops it based on the parameters defined in values[2]
+    """
+    image_path = values[0] #this is unused, but the image path is always values[0]
+    target = values[1]
+    crop_params = values[2]
+    
+    cropped_sample = some_crop_function(sample,crop_params)
+    
+    #the return should always have this structure (some image data, some target class index)
+    return (cropped_sample,target)
+    
+```
+
+```python
+def train_test_val_instances(split, directory, class_to_idx, index, is_valid_file):
+    """Example train/test/val instance creation on a dataset where each image requires a unique specific crop.
+    For each class loops through the associated image paths, and adds a tuple of (the path, the class index) to the instances list.
+    Then the instances list is segmented into train test and val splits.
+    Args:
+        split (tuple): Tuple of ratios (from 0 to 1) for train, test, val values
+        directory (str): Parent directory to read images from
+        class_to_idx (dict): Dictionary to map values from class strings to index values
+        index (dict): Index file dict object
+        is_valid_file (callable): Function to verify if a file should be loaded
+    Returns:
+        (tuple): Tuple of length 3 containing train, test, val instances
+    """
+    train, test, val = [], [], []
+    i = 0
+    for target_class in sorted(class_to_idx.keys()):
+        i += 1
+        if not os.path.isdir(directory):
+            continue
+        instances = []
+        for params in index[target_class]:
+            file = params['file_path']
+            crop_params = params['crop']
+            if is_valid_file(file):
+                path = os.path.join(directory, file)
+                #the path to the image must always be the first parameter in the instances; everything else is optional
+                instances.append((path, class_to_idx[target_class],crop_params))
+
+        trainp, _, valp = split
+
+        train += instances[:int(len(instances)*trainp)]
+        test += instances[int(len(instances)*trainp):int(len(instances)*(1-valp))]
+        val += instances[int(len(instances)*(1-valp)):]
+    return train, test, val
+```
