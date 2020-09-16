@@ -28,6 +28,6 @@ make test
 Distributed under the MIT license. See ``LICENSE`` for more information.
 
 ## Documentation & Usage
-- [Usage docs](https://betterloader.readthedocs.io/)
+- [Usage docs](https://binitai.github.io/BetterLoader/)
 - [Example implementation](./examples)
 - [Contributing](./CONTRIBUTING.md)
