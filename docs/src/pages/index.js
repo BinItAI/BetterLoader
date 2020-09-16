@@ -22,8 +22,7 @@ const features = [
     imageUrl: 'img/undraw_docusaurus_tree.svg',
     description: (
       <>
-        BetterLoader lets you focus on your deep learning models, while we handle the data. Specify custom files to conditionally load parts of your dataset, without needing to maintain either symlinks,
-        or multiple copies of files.
+        BetterLoader lets you focus on your deep learning models, while we handle conditional data loading, or multiple copies of files.
       </>
     ),
   },
@@ -47,8 +46,8 @@ function Feature({imageUrl, title, description}) {
           <img className={styles.featureImage} src={imgUrl} alt={title} />
         </div>
       )}
-      <h3>{title}</h3>
-      <p>{description}</p>
+      <h3 style={{textAlign: "center"}}>{title}</h3>
+      <p style={{textAlign: "center"}}>{description}</p>
     </div>
   );
 }
