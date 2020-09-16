@@ -1,28 +1,48 @@
-from betterloader import BetterLoader
+'''Test Suite for BetterLoader
+'''
 import unittest
+from betterloader import BetterLoader
+from defaults import simple_metadata
 
-class Tests(unittest.TestCase):
+# pylint: disable=no-self-use
+
+class Integration(unittest.TestCase):
+    """Suite of Integration tests for the BetterLoader
     """
-    Some basic unit tests for betterloader
-    """
 
-    def test_dataset(self):
-        return True
+    def test_defaults(self):
+        '''Test the BetterLoader call using the default parameters
+        '''
+        index_json = './examples/sample_index.json'
+        basepath = "./examples/sample_dataset/"
+        batch_size = 2
 
-    def test_small_dataset(self):
-        return True
+        loader = BetterLoader(basepath=basepath, index_json_path=index_json)
+        dataloaders, sizes = loader.fetch_segmented_dataloaders(batch_size=batch_size, transform=None)
 
-    def test_large_dataset(self):
-        return True
+        assert not dataloaders is None
+        
+        assert sizes["train"] == 4
+        assert sizes["test"] == 2
+        assert sizes["val"] == 2
+    
+    def test_simple_metadata(self):
+        '''Test the BetterLoader call using the same default functions, but passed in this time
+        '''
+        index_json = './examples/sample_index.json'
+        basepath = "./examples/sample_dataset/"
+        batch_size = 2
 
-    def test_no_transform(self):
-        return True
+        dataset_metadata = simple_metadata()
 
-    def test_transform(self):
-        return True
+        loader = BetterLoader(basepath=basepath, index_json_path=index_json, dataset_metadata=dataset_metadata)
+        dataloaders, sizes = loader.fetch_segmented_dataloaders(batch_size=batch_size, transform=None)
 
-    def test_train_test_val_ratios(self):
-        return True
+        assert not dataloaders is None
+
+        assert sizes["train"] == 4
+        assert sizes["test"] == 2
+        assert sizes["val"] == 2
 
 if __name__ == '__main__':
     unittest.main()

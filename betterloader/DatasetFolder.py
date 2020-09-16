@@ -33,7 +33,7 @@ def default_pretransform(sample, values):
     target = values[1]
     return sample, target
 
-def make_dataset(directory, class_to_idx, extensions=None, is_valid_file=None, instance='train', index=None, train_test_val_instances = None):
+def make_dataset(directory, class_to_idx, extensions=None, is_valid_file=None, instance='train', index=None, train_test_val_instances=None):
     """Makes the actual dataset
     Args:
         directory (string): Root directory path.
@@ -56,7 +56,7 @@ def make_dataset(directory, class_to_idx, extensions=None, is_valid_file=None, i
         def is_valid_file(x):
             return has_file_allowed_extension(x, extensions)
 
-    train, test, val = train_test_val_instances(directory,class_to_idx,index, is_valid_file)
+    train, test, val = train_test_val_instances(directory, class_to_idx, index, is_valid_file)
 
     return train if instance == 'train' else test if instance == 'test' else val
 
@@ -133,7 +133,7 @@ class DatasetFolder(VisionDataset):
             No class is a subdirectory of another.
         """
 
-        classes,class_to_idx = self.class_data(root_dir, self.index)
+        classes, class_to_idx = self.class_data(root_dir, self.index)
 
         return classes, class_to_idx
 
@@ -151,7 +151,7 @@ class DatasetFolder(VisionDataset):
         values = self.samples[index]
         path = values[0]
         sample = self.loader(path)
-        sample, target = self.pretransform(sample,values)
+        sample, target = self.pretransform(sample, values)
 
         if self.transform is not None:
             sample = self.transform(sample)
