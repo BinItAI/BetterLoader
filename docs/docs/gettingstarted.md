@@ -89,9 +89,7 @@ def pretransform(sample, values):
 
 ```python
 def train_test_val_instances(split, directory, class_to_idx, index, is_valid_file):
-    """Example train/test/val instance creation on a dataset where each image requires a unique specific crop.
-    For each class loops through the associated image paths, and adds a tuple of (the path, the class index) to the instances list.
-    Then the instances list is segmented into train test and val splits.
+    """Function to perform default train/test/val instance creation
     Args:
         split (tuple): Tuple of ratios (from 0 to 1) for train, test, val values
         directory (str): Parent directory to read images from
@@ -108,13 +106,10 @@ def train_test_val_instances(split, directory, class_to_idx, index, is_valid_fil
         if not os.path.isdir(directory):
             continue
         instances = []
-        for params in index[target_class]:
-            file = params['file_path']
-            crop_params = params['crop']
-            if is_valid_file(file):
-                path = os.path.join(directory, file)
-                #the path to the image must always be the first parameter in the instances; everything else is optional
-                instances.append((path, class_to_idx[target_class],crop_params))
+        for filename in index[target_class]:
+            if is_valid_file(filename):
+                path = os.path.join(directory, filename)
+                instances.append((path, class_to_idx[target_class]))
 
         trainp, _, valp = split
 
