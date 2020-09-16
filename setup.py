@@ -18,7 +18,7 @@ setup(
     author='BinIt Inc',
     author_email='',
     license='MIT',
-    download_url="https://github.com/BinItAI/BetterLoader/archive/0.1.4.tar.gz",
+    download_url="https://github.com/BinItAI/BetterLoader/archive/0.1.4.zip",
     packages=['betterloader'],
     install_requires=['future==0.18.2', 'numpy==1.19.1', 'Pillow==7.2.0', 'torch==1.6.0', 'torchvision==0.7.0'],
 

@@ -119,10 +119,8 @@ class BetterLoader: # pylint: disable=too-few-public-methods
         self.index_json_path = index_json_path
         self.classes = []
         self.class_to_idx = {}
-        self.dataset_metadata = None if dataset_metadata is None else {
-            i: dataset_metadata[i] for i in dataset_metadata if i != 'split'}
-        self.split = dataset_metadata["split"] if "split" in dataset_metadata else (
-            0.6, 0.2, 0.2)
+        self.dataset_metadata = {} if dataset_metadata is None else {i: dataset_metadata[i] for i in dataset_metadata if i != 'split'}
+        self.split = self.dataset_metadata["split"] if "split" in self.dataset_metadata else (0.6, 0.2, 0.2)
 
     def _set_class_data(self, datasets):
         '''Wrapper to set class data values upon processing datasets
@@ -163,7 +161,7 @@ class BetterLoader: # pylint: disable=too-few-public-methods
         """
 
         train_test_val_instances, class_data, pretransform = self._fetch_metadata(
-"train_test_val_instances"), self._fetch_metadata("classdata"), self._fetch_metadata("pretransform")
+            "train_test_val_instances"), self._fetch_metadata("classdata"), self._fetch_metadata("pretransform")
 
         if train_test_val_instances is None:
             train_test_val_instances = read_index_default
@@ -178,10 +176,10 @@ class BetterLoader: # pylint: disable=too-few-public-methods
 
         if transform is None:
             datasets = [ImageFolderCustom(root=self.basepath, is_valid_file=check_valid(subset_json),
-                                          instance=x, index=index,  train_test_val_instances=train_test_val_instances_wrap, class_data=class_data, pretransform=pretransform) for x in ('train', 'test', 'val')]
+                                          instance=x, index=index, train_test_val_instances=train_test_val_instances_wrap, class_data=class_data, pretransform=pretransform) for x in ('train', 'test', 'val')]
         else:
             datasets = [ImageFolderCustom(root=self.basepath, transform=transform, is_valid_file=check_valid(subset_json),
-                                          instance=x, index=index,  train_test_val_instances=train_test_val_instances_wrap, class_data=class_data, pretransform=pretransform) for x in ('train', 'test', 'val')]
+                                          instance=x, index=index, train_test_val_instances=train_test_val_instances_wrap, class_data=class_data, pretransform=pretransform) for x in ('train', 'test', 'val')]
 
         self._set_class_data(datasets)
 
