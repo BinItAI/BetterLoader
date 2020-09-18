@@ -16,6 +16,7 @@ import torch
 import torchvision
 
 from .ImageFolderCustom import ImageFolderCustom
+from .defaults import simple
 
 def fetch_json_from_path(path):
     """Helper method to fetch json dict from file
@@ -48,36 +49,10 @@ def check_valid(subset_json):
     return curry
 
 
-def read_index_default(split, directory, class_to_idx, index, is_valid_file): # pylint: disable=too-many-locals
-    """Function to perform default train/test/val instance creation
-    Args:
-        split (tuple): Tuple of ratios (from 0 to 1) for train, test, val values
-        directory (str): Parent directory to read images from
-        class_to_idx (dict): Dictionary to map values from class strings to index values
-        index (dict): Index file dict object
-        is_valid_file (callable): Function to verify if a file should be loaded
-    Returns:
-        (tuple): Tuple of length 3 containing train, test, val instances
-    """
-    train, test, val = [], [], []
-    i = 0
-    for target_class in sorted(class_to_idx.keys()):
-        i += 1
-        if not os.path.isdir(directory):
-            continue
-        instances = []
-        for file in index[target_class]:
-            if is_valid_file(file):
-                path = os.path.join(directory, file)
-                instances.append((path, class_to_idx[target_class]))
-
-        trainp, _, valp = split
-
-        train += instances[:int(len(instances)*trainp)]
-        test += instances[int(len(instances)*trainp):int(len(instances)*(1-valp))]
-        val += instances[int(len(instances)*(1-valp)):]
-    return train, test, val
-
+def read_index_default(split, directory, class_to_idx, index, is_valid_file):
+    '''Use the simple default setting if no custom function is passed to read the index file
+    '''
+    return simple.train_test_val_instances(split, directory, class_to_idx, index, is_valid_file)
 
 class BetterLoader: # pylint: disable=too-few-public-methods
     """A hypercustomisable Python dataloader
@@ -107,11 +82,10 @@ class BetterLoader: # pylint: disable=too-few-public-methods
 
     def __init__(self, basepath, index_json_path, num_workers=1, subset_json_path=None, dataset_metadata=None):
         if not os.path.exists(basepath):
-            raise Exception("Please supply a valid path to your base folder!")
+            raise FileNotFoundError("Please supply a valid path to your base folder!")
 
         if not os.path.exists(index_json_path):
-            raise Exception(
-                "Please supply a valid path to a dataset index file!")
+            raise FileNotFoundError("Please supply a valid path to a dataset index file!")
 
         self.basepath = basepath
         self.num_workers = num_workers
