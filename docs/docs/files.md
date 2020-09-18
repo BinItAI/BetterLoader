@@ -19,6 +19,14 @@ Index JSON files are default used to create a mapping from label, to filenames. 
 }
 ```
 
+An index file can also look like the below. The only catch here is that if you do this, you will have to pass a custom function as the `train_test_val_instances` key of the `dataset_metadata` parameter of the BetterLoader constructor. An example of such a function to group filenames based on regex can be found <a href="https://github.com/BinItAI/BetterLoader/tree/master/betterloader/defaults/regex.py">here.</a>
+```json
+{
+	"class1": "^a",
+	"class2": "^b"
+}
+```
+
 ### Subset Files
 As their names suggest, subset JSON files are used to instruct the BetterLoader to limit itself to only a subset of the dataset present at the root of the directory being loaded from. Currently, subset files just consist of a list of allowed files (as we've been auto-generating them as a part of our workflow), but this is definitely something we would be open to refining as well. A sample subset file would look something like this:
 ```json
