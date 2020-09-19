@@ -48,12 +48,6 @@ def check_valid(subset_json):
         return False
     return curry
 
-
-def read_index_default(split, directory, class_to_idx, index, is_valid_file):
-    '''Use the simple default setting if no custom function is passed to read the index file
-    '''
-    return simple.train_test_val_instances(split, directory, class_to_idx, index, is_valid_file)
-
 class BetterLoader: # pylint: disable=too-few-public-methods
     """A hypercustomisable Python dataloader
 
@@ -138,7 +132,7 @@ class BetterLoader: # pylint: disable=too-few-public-methods
             "train_test_val_instances"), self._fetch_metadata("classdata"), self._fetch_metadata("pretransform")
 
         if train_test_val_instances is None:
-            train_test_val_instances = read_index_default
+            train_test_val_instances = simple.train_test_val_instances
 
         index, subset_json = fetch_json_from_path(
             self.index_json_path), fetch_json_from_path(self.subset_json_path)
