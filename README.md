@@ -1,7 +1,11 @@
 # BetterLoader
-> Making it harder to do easy things, but easier to do harder things with the Pytorch Dataloader :)
+<p>
+  <img src="https://img.shields.io/pypi/dm/betterloader?style=for-the-badge"></img>
+  <img src="https://img.shields.io/github/issues/binitai/betterloader?style=for-the-badge"></img>
+  <img src="https://img.shields.io/pypi/v/betterloader?style=for-the-badge"></img>
+</p>
 
-BetterLoader is an extension of the default PyTorch dataloader class, that allows for custom transformations pre-load and image subset definitions. Use the power of custom index files to maintain only a single copy of a dataset with a fixed, flat file structure, and allow BetterLoader to do all the heavy lifting.
+<b>Making it harder to do easy things, but easier to do harder things with the Pytorch Dataloader :)</b><br/><br/>BetterLoader is an extension of the default PyTorch dataloader class, that allows for custom transformations pre-load and image subset definitions. Use the power of custom index files to maintain only a single copy of a dataset with a fixed, flat file structure, and allow BetterLoader to do all the heavy lifting.
 
 ## Installation
 ```sh
