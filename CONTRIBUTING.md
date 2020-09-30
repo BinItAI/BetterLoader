@@ -4,7 +4,7 @@ Thank you for your interest in contributing to BetterLoader!
 
 BetterLoader is built on open source and is maintained by the team at [BinIt](https://github.com/binitai/). We invite you to participate in our community by adding and commenting on [issues](https://github.com/BinItAI/BetterLoader/issues) (e.g., bug reports; new feature suggestions) or contributing code enhancements through a pull request.
 
-If you have any general questions about contributing to Perspective, please feel free to email either [Raghav](raghav.mecheri@columbia.edu) or [James](jbb2170@columbia.edu ), or just open an issue on [Github](https://github.com/BinItAI/BetterLoader/issues/new).
+If you have any general questions about contributing to BetterLoader, please feel free to email either [Raghav](raghav.mecheri@columbia.edu) or [James](jbb2170@columbia.edu ), or just open an issue on [Github](https://github.com/BinItAI/BetterLoader/issues/new).
 ## Guidelines
 
 When submitting PRs to BetterLoader, please respect the following general
