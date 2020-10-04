@@ -101,7 +101,7 @@ class BetterLoader: # pylint: disable=too-few-public-methods
         index_json_path (string): Path to index file
         classes (list): List of the class names sorted alphabetically
         class_to_idx (dict): Dict with items (class_name, class_index).
-        dataset_metadata (dict, optional): Optional metadata parameters
+        dataset_metadata (dict, optional): Optional metadata parameters. Also contains metadata key which has dataloader_params involved, which is a dict of additional required params.
         split (tuple): Tuple of train test val float values
     """
 
@@ -121,6 +121,10 @@ class BetterLoader: # pylint: disable=too-few-public-methods
         self.class_to_idx = {}
         self.dataset_metadata = {} if dataset_metadata is None else {i: dataset_metadata[i] for i in dataset_metadata if i != 'split'}
         self.split = self.dataset_metadata["split"] if "split" in self.dataset_metadata else (0.6, 0.2, 0.2)
+        self.dataloader_params = self.dataset_metadata['dataloader_params'] if 'dataloader_params' in self.dataset_metadata else None
+        self.is_classed = self._fetch_dataloader_param('supervised')
+
+
 
     def _set_class_data(self, datasets):
         '''Wrapper to set class data values upon processing datasets
@@ -145,6 +149,13 @@ class BetterLoader: # pylint: disable=too-few-public-methods
 
         if key in self.dataset_metadata:
             return self.dataset_metadata[key]
+
+        return None
+
+    def _fetch_dataloader_param(self, key):
+
+        if key in self.dataloader_params:
+            return self.dataloader_params[key]
 
         return None
 
