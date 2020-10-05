@@ -193,9 +193,24 @@ class BetterLoader: # pylint: disable=too-few-public-methods
                                           instance=x, index=index, train_test_val_instances=train_test_val_instances_wrap, class_data=class_data, pretransform=pretransform) for x in ('train', 'test', 'val')]
 
         self._set_class_data(datasets)
+        custom_collator = self.dataloader_params['custom_collate'] if 'custom_collate' in self.dataloader_params else None
+        drop_last = self.dataloader_params['drop_last'] if 'drop_last' in self.dataloader_params else False
+        pin_mem = self.dataloader_params['eccentric_object'] if 'eccentric_object' in self.dataloader_params else False
+        sampler = self.dataloader_params['sample_type'] if 'sample_type' in self.dataloader_params else None
+        if sampler is not None:
+            dataloaders = [torch.utils.data.DataLoader(x, batch_size=batch_size, num_workers=self.num_workers,
+                                                       collate_fn=custom_collator, sampler=sampler, pin_memory=pin_mem, drop_last=drop_last) for x in [
+                               datasets[0]]] + [
+                              torch.utils.data.DataLoader(x, batch_size=batch_size, num_workers=self.num_workers,
+                                                       collate_fn=custom_collator, sampler=sampler, pin_memory=pin_mem, drop_last=drop_last) for x in datasets[1:]]
 
-        dataloaders = [torch.utils.data.DataLoader(x, batch_size=batch_size, num_workers=self.num_workers, shuffle=True) for x in [
-            datasets[0]]] + [torch.utils.data.DataLoader(x, batch_size=batch_size, num_workers=self.num_workers, shuffle=False) for x in datasets[1:]]
+
+        else:
+            dataloaders = [torch.utils.data.DataLoader(x, batch_size=batch_size, num_workers=self.num_workers,
+                                                       collate_fn=custom_collator, shuffle=True, pin_memory=pin_mem, drop_last=drop_last) for x in [
+                               datasets[0]]] + [
+                              torch.utils.data.DataLoader(x, batch_size=batch_size, num_workers=self.num_workers,
+                                                       collate_fn=custom_collator, shuffle=False, pin_memory=pin_mem, drop_last=drop_last) for x in datasets[1:]]
 
         loaders = {
             "train": dataloaders[0],
