@@ -1,13 +1,21 @@
-language: node_js
-node_js:
-  - '10'
+dist: xenial
+language: python
+python:
+  - 3.6
+  - 3.7
+cache: pypi
 branches:
   only:
     - master
-cache:
-  yarn: true
-script:
-  - git config --global user.name "${GH_NAME}"
-  - git config --global user.email "${GH_EMAIL}"
-  - echo "machine github.com login ${GH_NAME} password ${GH_TOKEN}" > ~/.netrc
-  - cd docs && yarn && GIT_USER="${GH_NAME}" yarn deploy
+jobs:
+  include:
+    name: Test
+    script:
+      - make install
+      - make test
+    name: Docs
+    script:
+      - git config --global user.name "${GH_NAME}"
+      - git config --global user.email "${GH_EMAIL}"
+      - echo "machine github.com login ${GH_NAME} password ${GH_TOKEN}" > ~/.netrc
+      - cd docs && yarn && GIT_USER="${GH_NAME}" yarn deploy
