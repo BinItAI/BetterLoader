@@ -11,9 +11,9 @@ matrix:
       node_js: '10'
       cache:
         yarn: true
-      if: branch = master
       script:
         - git config --global user.name "${GH_NAME}"
         - git config --global user.email "${GH_EMAIL}"
         - echo "machine github.com login ${GH_NAME} password ${GH_TOKEN}" > ~/.netrc
-        - cd docs && yarn && GIT_USER="${GH_NAME}" yarn deploy
+        - cd docs && yarn && GIT_USER="${GH_NAME}"
+        - if [ "$TRAVIS_BRANCH" == "master" ]; then yarn deploy; fi
