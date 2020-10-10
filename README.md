@@ -1,6 +1,7 @@
 # BetterLoader
 <p>
   <img src="https://img.shields.io/pypi/dm/betterloader?style=for-the-badge"></img>
+  <img src="https://img.shields.io/travis/com/BinItAI/BetterLoader?style=for-the-badge"></img>
   <img src="https://img.shields.io/github/issues/binitai/betterloader?style=for-the-badge"></img>
   <img src="https://img.shields.io/pypi/v/betterloader?style=for-the-badge"></img>
   <img src="https://img.shields.io/github/license/binitai/betterloader?style=for-the-badge"></img>
