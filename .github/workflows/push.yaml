@@ -1,0 +1,61 @@
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  Test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x]
+        python-version: [3.6, 3.7, 3.8]
+
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Use Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Python Dependancies
+        run: make install
+
+      - name: Run Python test suite
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)
+          make test
+
+      - name: Install documentation dependancies
+        run: |
+          cd docs && npm install
+
+      - name: Test building docs
+        run: npm run build
+
+  Deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node 10
+        uses: actions/setup-node@v1
+
+      - name: Build docs and deploy
+        run: |
+          git config --global user.name "${GH_NAME}"
+          git config --global user.email "${GH_EMAIL}"
+          echo "machine github.com login ${GH_NAME} password ${GH_TOKEN}" > ~/.netrc
+          cd docs && npm install
+          GIT_USER="${GH_NAME}" npm run deploy
+
