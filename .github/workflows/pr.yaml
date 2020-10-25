@@ -21,6 +21,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - uses: borales/actions-yarn@v2.0.0
+
       - name: Use Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
@@ -34,9 +36,8 @@ jobs:
           export PYTHONPATH=$PYTHONPATH:$(pwd)
           make test
 
-      - name: Install documentation dependancies
+      - name: Install documentation dependancies & build docs
         run: |
-          cd docs && npm install
-
-      - name: Test building docs
-        run: npm run build
+          cd docs
+          yarn
+          yarn build

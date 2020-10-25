@@ -21,6 +21,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - uses: borales/actions-yarn@v2.0.0
+
       - name: Use Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
@@ -34,12 +36,11 @@ jobs:
           export PYTHONPATH=$PYTHONPATH:$(pwd)
           make test
 
-      - name: Install documentation dependancies
+      - name: Install documentation dependancies & build docs
         run: |
-          cd docs && npm install
-
-      - name: Test building docs
-        run: npm run build
+          cd docs
+          yarn
+          yarn build
 
   Deploy:
     runs-on: ubuntu-latest
@@ -51,11 +52,13 @@ jobs:
       - name: Use Node 10
         uses: actions/setup-node@v1
 
+      - uses: borales/actions-yarn@v2.0.0
+
       - name: Build docs and deploy
         run: |
           git config --global user.name "${GH_NAME}"
           git config --global user.email "${GH_EMAIL}"
           echo "machine github.com login ${GH_NAME} password ${GH_TOKEN}" > ~/.netrc
-          cd docs && npm install
-          GIT_USER="${GH_NAME}" npm run deploy
+          cd docs && yarn
+          GIT_USER="${GH_NAME}" yarn deploy
 
