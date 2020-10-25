@@ -101,8 +101,13 @@ class BetterLoader: # pylint: disable=too-few-public-methods
         index_json_path (string): Path to index file
         classes (list): List of the class names sorted alphabetically
         class_to_idx (dict): Dict with items (class_name, class_index).
-        dataset_metadata (dict, optional): Optional metadata parameters. Also contains metadata key which has dataloader_params involved, which is a dict of additional required params.
+        dataset_metadata (dict, optional): Optional metadata parameters. Also contains metadata key which has
+        dataloader_params involved, which is a dict of additional required params. This extra dictionary must atleast
+        contain a bool indicating if the experiment is 'supervised', and addtionally might contain 'custom_collate'
+        (a custom collator), an additional 'sample_type' for arbitrary data sampling, 'eccentric_object' to indicate
+        if it has to be pinned in memory and a indicator to 'drop_last' for non-integer  sample_size/batch_size value
         split (tuple): Tuple of train test val float values
+
     """
 
     def __init__(self, basepath, index_json_path, num_workers=1, subset_json_path=None, dataset_metadata=None):
@@ -192,11 +197,14 @@ class BetterLoader: # pylint: disable=too-few-public-methods
             datasets = [ImageFolderCustom(root=self.basepath, transform=transform, is_valid_file=check_valid(subset_json),
                                           instance=x, index=index, train_test_val_instances=train_test_val_instances_wrap, class_data=class_data, pretransform=pretransform) for x in ('train', 'test', 'val')]
 
+
         self._set_class_data(datasets)
         custom_collator = self.dataloader_params['custom_collate'] if 'custom_collate' in self.dataloader_params else None
         drop_last = self.dataloader_params['drop_last'] if 'drop_last' in self.dataloader_params else False
         pin_mem = self.dataloader_params['eccentric_object'] if 'eccentric_object' in self.dataloader_params else False
         sampler = self.dataloader_params['sample_type'] if 'sample_type' in self.dataloader_params else None
+
+
         if sampler is not None:
             dataloaders = [torch.utils.data.DataLoader(x, batch_size=batch_size, num_workers=self.num_workers,
                                                        collate_fn=custom_collator, sampler=sampler, pin_memory=pin_mem, drop_last=drop_last) for x in [
