@@ -62,5 +62,5 @@ jobs:
           cd docs && yarn
           yarn deploy
         env:
-          GIT_USER: "${{ secrets.GH_NAME }}"
+          GIT_USER: ${{ secrets.GH_NAME }}
 
