@@ -1,7 +1,6 @@
-on:
-  pull_request:
-    branches:
-      - master
+name: Pull Build
+
+on: pull_request:
 
 jobs:
   Test:
