@@ -1,13 +1,32 @@
-# BetterLoader
-<p>
-  <img src="https://img.shields.io/pypi/dm/betterloader?style=for-the-badge"></img>
-  <img src="https://img.shields.io/github/workflow/status/BinItAI/BetterLoader/Build?style=for-the-badge"></img>
-  <img src="https://img.shields.io/github/issues/binitai/betterloader?style=for-the-badge"></img>
-  <img src="https://img.shields.io/pypi/v/betterloader?style=for-the-badge"></img>
-  <img src="https://img.shields.io/github/license/binitai/betterloader?style=for-the-badge"></img>
+<div align="center">
+
+<img src="./docs/static/img/logo_text.png" width="600px">
+
+
+**Making it harder to do easy things, but easier to do harder things with the Pytorch Dataloader. BetterLoader is the hyper customizable and configurable extension of the PyTorch DataLoader.**
+
+---
+
+<p align="center">
+  <a href="#about-betterloader">About</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#usage">Usage</a> •
+  <a href="#development">Development</a> •
+  <a href="#meta">License</a>
 </p>
 
-<b>Making it harder to do easy things, but easier to do harder things with the Pytorch Dataloader :)</b><br/><br/>BetterLoader is an extension of the default PyTorch dataloader class, that allows for custom transformations pre-load and image subset definitions. Use the power of custom index files to maintain only a single copy of a dataset with a fixed, flat file structure, and allow BetterLoader to do all the heavy lifting.
+[![PyPi Badge](https://img.shields.io/pypi/dm/betterloader?style=for-the-badge)](https://pypi.org/project/BetterLoader/)
+[![PyPi Version](https://img.shields.io/pypi/v/betterloader?style=for-the-badge)](https://pypi.org/project/BetterLoader/)
+[![Github Actions Build Status](https://img.shields.io/github/workflow/status/BinItAI/BetterLoader/Build?style=for-the-badge)](https://img.shields.io/github/workflow/status/BinItAI/BetterLoader/Build?style=for-the-badge)
+[![Issues](https://img.shields.io/github/issues/binitai/betterloader?style=for-the-badge)](https://github.com/BinItAI/BetterLoader/issues)
+[![license](https://img.shields.io/github/license/binitai/betterloader?style=for-the-badge)](https://github.com/BinItAI/BetterLoader/blob/master/LICENSE.txt)
+
+</div>
+
+---
+
+## About BetterLoader
+BetterLoader is an extension of the default PyTorch dataloader class, that allows for custom transformations pre-load and image subset definitions. Use the power of custom index files to maintain only a single copy of a dataset with a fixed, flat file structure, and allow BetterLoader to do all the heavy lifting.
 
 ## Installation
 ```sh
@@ -36,7 +55,7 @@ print("Dataloader sizes: {}".format(str(sizes)))
 ```
 For more information and more detailed examples, please check out <a href="https://binitai.github.io/BetterLoader/">the BetterLoader docs</a>!
 
-## Development setup
+## Development
 
 We use <a href="https://opensource.com/article/18/8/what-how-makefile">Makefile</a> to make our lives a little easier :)
 ### Install Dependancies
