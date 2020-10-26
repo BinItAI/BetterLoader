@@ -3,7 +3,7 @@
 <img src="./docs/static/img/logo_text.png" width="600px">
 
 
-**Making it harder to do easy things, but easier to do harder things with the Pytorch Dataloader. BetterLoader is the hyper customizable and configurable extension of the PyTorch DataLoader.**
+**Making it harder to do easy things, but easier to do harder things with the Pytorch Dataloader**
 
 ---
 
@@ -26,7 +26,7 @@
 ---
 
 ## About BetterLoader
-BetterLoader is an extension of the default PyTorch dataloader class, that allows for custom transformations pre-load and image subset definitions. Use the power of custom index files to maintain only a single copy of a dataset with a fixed, flat file structure, and allow BetterLoader to do all the heavy lifting.
+BetterLoader is a hyper-customizable extension of the default PyTorch dataloader class, that allows for custom transformations pre-load and image subset definitions. Use the power of custom index files to maintain only a single copy of a dataset with a fixed, flat file structure, and allow BetterLoader to do all the heavy lifting.
 
 ## Installation
 ```sh
