@@ -1,0 +1,67 @@
+name: Build
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  Test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x]
+        python-version: [3.6, 3.7, 3.8]
+
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - uses: borales/actions-yarn@v2.0.0
+
+      - name: Use Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Python Dependancies
+        run: make install
+
+      - name: Run Python test suite
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)
+          make test
+
+      - name: Install documentation dependancies & build docs
+        run: |
+          cd docs
+          yarn
+          yarn build
+
+  Deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node 10
+        uses: actions/setup-node@v1
+
+      - uses: borales/actions-yarn@v2.0.0
+
+      - name: Build docs and deploy
+        run: |
+          git config --global user.name "${{ secrets.GH_NAME }}"
+          git config --global user.email "${{ secrets.GH_EMAIL }}"
+          echo "machine github.com login ${{ secrets.GH_NAME }} password ${{ secrets.GH_TOKEN }}" > ~/.netrc
+          cd docs && yarn
+          yarn deploy
+        env:
+          GIT_USER: ${{ secrets.GH_NAME }}
+

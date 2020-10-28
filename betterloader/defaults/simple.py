@@ -3,7 +3,7 @@ Simple function definitions for very basic BetterLoader metadata
 '''
 import os
 
-def simple_train_test_val_instances(split, directory, class_to_idx, index, is_valid_file): # pylint: disable=too-many-locals
+def train_test_val_instances(split, directory, class_to_idx, index, is_valid_file): # pylint: disable=too-many-locals
     """Function to perform default train/test/val instance creation
     Args:
         split (tuple): Tuple of ratios (from 0 to 1) for train, test, val values
@@ -33,7 +33,7 @@ def simple_train_test_val_instances(split, directory, class_to_idx, index, is_va
         val += instances[int(len(instances)*(1-valp)):]
     return train, test, val
 
-def simple_classdata(_, index):
+def classdata(_, index):
     '''Given class data, just create the default classes list and class_to_idx dict
     '''
     classes = list(index.keys())
@@ -41,7 +41,7 @@ def simple_classdata(_, index):
     class_to_idx = {classes[i]: i for i in range(len(classes))}
     return classes, class_to_idx
  
-def simple_pretransform(sample, values):
+def pretransform(sample, values):
     '''Given a sample and a values list as specified in the docs, just return the path
     '''
     target = values[1]

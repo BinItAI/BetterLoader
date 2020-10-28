@@ -2,12 +2,12 @@
 '''
 import unittest
 from betterloader import BetterLoader
-from defaults import simple_metadata, complex_metadata
+from betterloader.defaults import simple_metadata, regex_metadata, complex_metadata
 
 # pylint: disable=no-self-use
 
 class Integration(unittest.TestCase):
-    """Suite of Integration tests for the BetterLoader
+    """Suite of Integration tests for BetterLoader
     """
 
     def test_defaults(self):
@@ -18,14 +18,15 @@ class Integration(unittest.TestCase):
         batch_size = 2
 
         loader = BetterLoader(basepath=basepath, index_json_path=index_json)
-        dataloaders, sizes = loader.fetch_segmented_dataloaders(batch_size=batch_size, transform=None)
+        dataloaders, sizes = loader.fetch_segmented_dataloaders(
+            batch_size=batch_size, transform=None)
 
         assert not dataloaders is None
-        
+
         assert sizes["train"] == 4
         assert sizes["test"] == 2
         assert sizes["val"] == 2
-    
+
     def test_simple_metadata(self):
         '''Test the BetterLoader call using the same default functions, but passed in this time
         '''
@@ -35,8 +36,10 @@ class Integration(unittest.TestCase):
 
         dataset_metadata = simple_metadata()
 
-        loader = BetterLoader(basepath=basepath, index_json_path=index_json, dataset_metadata=dataset_metadata)
-        dataloaders, sizes = loader.fetch_segmented_dataloaders(batch_size=batch_size, transform=None)
+        loader = BetterLoader(
+            basepath=basepath, index_json_path=index_json, dataset_metadata=dataset_metadata)
+        dataloaders, sizes = loader.fetch_segmented_dataloaders(
+            batch_size=batch_size, transform=None)
 
         assert not dataloaders is None
 
@@ -44,8 +47,7 @@ class Integration(unittest.TestCase):
         assert sizes["test"] == 2
         assert sizes["val"] == 2
 
-
-    def test_complex_metadats(self):
+    def test_complex_metadata(self):
 
         index_json = './examples/sample_index.json'
         basepath = "./examples/sample_dataset/"
@@ -60,6 +62,56 @@ class Integration(unittest.TestCase):
         assert sizes["train"] == 4
         assert sizes["test"] == 2
         assert sizes["val"] == 2
+
+    def test_regex_metadata(self):
+        '''Test the BetterLoader call using regex based functions, but passed in this time
+        '''
+        index_json = './examples/regex_index.json'
+        basepath = "./examples/regex_dataset/"
+        batch_size = 2
+
+        dataset_metadata = regex_metadata()
+
+        loader = BetterLoader(
+            basepath=basepath, index_json_path=index_json, dataset_metadata=dataset_metadata)
+        dataloaders, sizes = loader.fetch_segmented_dataloaders(
+            batch_size=batch_size, transform=None)
+
+        assert not dataloaders is None
+
+        assert sizes["train"] == 2
+        assert sizes["test"] == 2
+        assert sizes["val"] == 2
+
+    def test_bad_paths(self):
+        '''Test the BetterLoader call using two bad paths - the basepath should be the first exception thrown
+        '''
+        index_json = './badpath/'
+        basepath = "./badpath/"
+
+        dataset_metadata = simple_metadata()
+        self.assertRaisesRegex(FileNotFoundError, "Please supply a valid path to your base folder!",
+                               BetterLoader, basepath, index_json, dataset_metadata)
+
+    def test_bad_basepath(self):
+        '''Test the BetterLoader call using a bad basepath
+        '''
+        index_json = './examples/sample_index.json'
+        basepath = "./badpath/"
+
+        dataset_metadata = simple_metadata()
+        self.assertRaisesRegex(FileNotFoundError, "Please supply a valid path to your base folder!",
+                               BetterLoader, basepath, index_json, dataset_metadata)
+
+    def test_bad_index(self):
+        '''Test the BetterLoader call using a bad index path
+        '''
+        index_json = './badpath'
+        basepath = "./examples/sample_dataset/"
+
+        dataset_metadata = simple_metadata()
+        self.assertRaisesRegex(FileNotFoundError, "Please supply a valid path to a dataset index file!",
+                               BetterLoader, basepath, index_json, dataset_metadata)
 
 if __name__ == '__main__':
     unittest.main()
