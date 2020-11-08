@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./docs/static/img/logo_text.png" width="600px">
+<img src="https://github.com/BinItAI/BetterLoader/blob/master/docs/static/img/logo_text.png" width="600px">
 
 
 **Making it harder to do easy things, but easier to do harder things with the Pytorch Dataloader**
