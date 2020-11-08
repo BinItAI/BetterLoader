@@ -68,12 +68,6 @@ BetterLoader accepts certain key value pairs as dataset metadata, in order to en
 8. pin_mem (bool, optional): Sets the data load to copy tensors into CUDA pinned memory before returning them, providing your data elements are not custom type
 9. sampler (torch.utils.data.Sampler or `iterable`, optional): Can be used to define a custom strategy to draw data from the dataset
 
-        self.supervised = self.dataset_metadata["supervised"] if "supervised" in self.dataset_metadata else True
-        self.custom_collator = self.dataset_metadata['custom_collate'] if 'custom_collate' in self.dataset_metadata else None
-        self.drop_last = self.dataset_metadata['drop_last'] if 'drop_last' in self.dataset_metadata else False
-        self.pin_mem = self.dataset_metadata['eccentric_object'] if 'eccentric_object' in self.dataset_metadata else False
-        self.sampler = self.dataset_metadata['sample_type'] if 'sample_type' in self.dataset_metadata else None
-
 ---
 
 Here is an example of a `pretransform` and a `train_test_val_instances` designed to allow for a specified crop to be taken of each image.

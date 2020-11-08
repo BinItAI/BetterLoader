@@ -10,13 +10,13 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='BetterLoader',
-    version='0.1.5',    
+    version='0.1.6',    
     description='A better PyTorch dataloader',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/BinItAI/BetterLoader',
     author='BinIt Inc',
-    author_email='',
+    author_email='support@binit.in',
     license='MIT',
     download_url="https://github.com/BinItAI/BetterLoader/archive/0.1.5.zip",
     packages=['betterloader'],
