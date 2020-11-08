@@ -2,7 +2,7 @@
 '''
 import unittest
 from betterloader import BetterLoader
-from betterloader.defaults import simple_metadata, regex_metadata, complex_metadata
+from betterloader.defaults import simple_metadata, regex_metadata, collate_metadata
 
 # pylint: disable=no-self-use
 
@@ -53,7 +53,7 @@ class Integration(unittest.TestCase):
         basepath = "./examples/sample_dataset/"
         batch_size = 2
 
-        dataset_metadata = complex_metadata()
+        dataset_metadata = collate_metadata()
         loader = BetterLoader(basepath=basepath, index_json_path=index_json, dataset_metadata=dataset_metadata)
         dataloaders, sizes = loader.fetch_segmented_dataloaders(batch_size=batch_size, transform=None)
 

@@ -22,7 +22,7 @@ def regex_metadata():
     metadata["train_test_val_instances"] = train_test_val_instances
     return metadata
 
-def complex_metadata():
+def collate_metadata():
     """Create a collation based metadata object
     """
     from .collate import basic_collate_fn
@@ -31,7 +31,10 @@ def complex_metadata():
     metadata["pretransform"] = pretransform
     metadata["classdata"] = classdata
     metadata["train_test_val_instances"] = train_test_val_instances
-    metadata["dataloader_params"] = {'supervised': True, 'custom_collate': basic_collate_fn, 'drop_last': True,
-                                     'eccentric_object':False, 'sample_type': None}
+    metadata["supervised"] = True
+    metadata["custom_collate"] = basic_collate_fn
+    metadata["drop_last"] = True
+    metadata["eccentric_object"] = False
+    metadata["sample_type"] = None
 
     return metadata

@@ -70,8 +70,7 @@ class BetterLoader: # pylint: disable=too-few-public-methods
         index_json_path (string): Path to index file
         classes (list): List of the class names sorted alphabetically
         class_to_idx (dict): Dict with items (class_name, class_index).
-        dataset_metadata (dict, optional): Optional metadata parameters. Also contains metadata key which has
-        dataloader_params involved, which is a dict of additional required params. This extra dictionary must atleast
+        dataset_metadata (dict, optional): Optional metadata parameters.  This dictionary must atleast
         contain a bool indicating if the experiment is 'supervised', and addtionally might contain 'custom_collate'
         (a custom collator), an additional 'sample_type' for arbitrary data sampling, 'eccentric_object' to indicate
         if it has to be pinned in memory and a indicator to 'drop_last' for non-integer  sample_size/batch_size value
@@ -95,7 +94,12 @@ class BetterLoader: # pylint: disable=too-few-public-methods
         self.dataset_metadata = {} if dataset_metadata is None else {i: dataset_metadata[i] for i in dataset_metadata if i != 'split'}
         self.split = self.dataset_metadata["split"] if "split" in self.dataset_metadata else (0.6, 0.2, 0.2)
         self.supervised = self.dataset_metadata["supervised"] if "supervised" in self.dataset_metadata else True
-        self.dataloader_params = self.dataset_metadata['dataloader_params'] if 'dataloader_params' in self.dataset_metadata else {}
+        self.custom_collator = self.dataset_metadata['custom_collate'] if 'custom_collate' in self.dataset_metadata else None
+        self.drop_last = self.dataset_metadata['drop_last'] if 'drop_last' in self.dataset_metadata else False
+        self.pin_mem = self.dataset_metadata['eccentric_object'] if 'eccentric_object' in self.dataset_metadata else False
+        self.sampler = self.dataset_metadata['sample_type'] if 'sample_type' in self.dataset_metadata else None
+
+        #self.dataloader_params = self.dataset_metadata['dataloader_params'] if 'dataloader_params' in self.dataset_metadata else {}
 
     def _set_class_data(self, datasets):
         '''Wrapper to set class data values upon processing datasets
@@ -120,13 +124,6 @@ class BetterLoader: # pylint: disable=too-few-public-methods
 
         if key in self.dataset_metadata:
             return self.dataset_metadata[key]
-
-        return None
-
-    def _fetch_dataloader_param(self, key):
-
-        if key in self.dataloader_params:
-            return self.dataloader_params[key]
 
         return None
 
@@ -165,10 +162,10 @@ class BetterLoader: # pylint: disable=too-few-public-methods
 
         self._set_class_data(datasets)
 
-        custom_collator = self.dataloader_params['custom_collate'] if 'custom_collate' in self.dataloader_params else None
-        drop_last = self.dataloader_params['drop_last'] if 'drop_last' in self.dataloader_params else False
-        pin_mem = self.dataloader_params['eccentric_object'] if 'eccentric_object' in self.dataloader_params else False
-        sampler = self.dataloader_params['sample_type'] if 'sample_type' in self.dataloader_params else None
+        custom_collator = self.custom_collator
+        drop_last = self.drop_last
+        pin_mem = self.pin_mem
+        sampler = self.sampler
 
 
         if sampler is not None:
