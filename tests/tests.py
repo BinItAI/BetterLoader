@@ -2,7 +2,7 @@
 '''
 import unittest
 from betterloader import BetterLoader
-from betterloader.defaults import simple_metadata, regex_metadata
+from betterloader.defaults import simple_metadata, regex_metadata, collate_metadata
 
 # pylint: disable=no-self-use
 
@@ -40,6 +40,22 @@ class Integration(unittest.TestCase):
             basepath=basepath, index_json_path=index_json, dataset_metadata=dataset_metadata)
         dataloaders, sizes = loader.fetch_segmented_dataloaders(
             batch_size=batch_size, transform=None)
+
+        assert not dataloaders is None
+
+        assert sizes["train"] == 4
+        assert sizes["test"] == 2
+        assert sizes["val"] == 2
+
+    def test_complex_metadata(self):
+
+        index_json = './examples/sample_index.json'
+        basepath = "./examples/sample_dataset/"
+        batch_size = 2
+
+        dataset_metadata = collate_metadata()
+        loader = BetterLoader(basepath=basepath, index_json_path=index_json, dataset_metadata=dataset_metadata)
+        dataloaders, sizes = loader.fetch_segmented_dataloaders(batch_size=batch_size, transform=None)
 
         assert not dataloaders is None
 
@@ -96,7 +112,6 @@ class Integration(unittest.TestCase):
         dataset_metadata = simple_metadata()
         self.assertRaisesRegex(FileNotFoundError, "Please supply a valid path to a dataset index file!",
                                BetterLoader, basepath, index_json, dataset_metadata)
-
 
 if __name__ == '__main__':
     unittest.main()

@@ -62,6 +62,17 @@ BetterLoader accepts certain key value pairs as dataset metadata, in order to en
   The first element of this tuple must also be the filepath of the image for that datapoint.
   The default also has the target class index as the second element of this tuple, this is probably good for most use cases.
   Each of these datapoint tuples is passed as the `values` argument in the pretransform, any additional data necessary for transforming the datapoint before it is loaded can go in the datapoint tuple.
+5. supervised (bool, optional): Defines whether or not the experiment is supervised
+6. custom_collator (callable, optional): Custom function that merges a list of samples to form a mini-batch of Tensors
+7. drop_last (bool, optional): Defines whether to drop the last incomplete batch if the dataset is not divisible by batch size to avoid sizing errors
+8. pin_mem (bool, optional): Sets the data load to copy tensors into CUDA pinned memory before returning them, providing your data elements are not custom type
+9. sampler (torch.utils.data.Sampler or `iterable`, optional): Can be used to define a custom strategy to draw data from the dataset
+
+        self.supervised = self.dataset_metadata["supervised"] if "supervised" in self.dataset_metadata else True
+        self.custom_collator = self.dataset_metadata['custom_collate'] if 'custom_collate' in self.dataset_metadata else None
+        self.drop_last = self.dataset_metadata['drop_last'] if 'drop_last' in self.dataset_metadata else False
+        self.pin_mem = self.dataset_metadata['eccentric_object'] if 'eccentric_object' in self.dataset_metadata else False
+        self.sampler = self.dataset_metadata['sample_type'] if 'sample_type' in self.dataset_metadata else None
 
 ---
 
