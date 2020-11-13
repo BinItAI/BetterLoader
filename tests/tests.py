@@ -1,6 +1,10 @@
 '''Test Suite for BetterLoader
 '''
 import unittest
+
+import sys, os
+sys.path.append(os.getcwd())
+
 from betterloader import BetterLoader
 from betterloader.defaults import simple_metadata, regex_metadata, collate_metadata
 

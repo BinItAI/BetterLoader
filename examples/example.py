@@ -5,6 +5,9 @@ Notes:
 2. The structure of the index file can be any json as long as you change the other parameters to work with that
 '''
 
+import sys, os
+sys.path.append(os.getcwd())
+
 from betterloader import BetterLoader
 
 index_json = './examples/sample_index.json'
