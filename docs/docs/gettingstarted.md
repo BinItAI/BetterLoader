@@ -30,10 +30,12 @@ A sample use-case for BetterLoader may be found below. It's worth noting that at
 from betterloader import BetterLoader
 
 index_json = './examples/sample_index.json'
+# or index_object = {"class1":["image0.jpg","image1.jpg","image2.jpg","image3.jpg"],"class2":["image4.jpg","image5.jpg","image6.jpg","image7.jpg"]}
 basepath = "./examples/sample_dataset/"
 batch_size = 2
 
 loader = BetterLoader(basepath=basepath, index_json_path=index_json)
+# or loader = BetterLoader(basepath=basepath, index_object=index_object)
 dataloaders, sizes = loader.fetch_segmented_dataloaders(batch_size=batch_size, transform=None)
 
 print("Dataloader sizes: {}".format(str(sizes)))
