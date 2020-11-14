@@ -78,17 +78,23 @@ class BetterLoader: # pylint: disable=too-few-public-methods
 
     """
 
-    def __init__(self, basepath, index_json_path, num_workers=1, subset_json_path=None, dataset_metadata=None):
+    def __init__(self, basepath, index_json_path=None, num_workers=1, index_object=None, subset_json_path=None, subset_object=None, dataset_metadata=None):
         if not os.path.exists(basepath):
             raise FileNotFoundError("Please supply a valid path to your base folder!")
 
-        if not os.path.exists(index_json_path):
-            raise FileNotFoundError("Please supply a valid path to a dataset index file!")
-
+        if index_json_path and not os.path.exists(index_json_path):
+            if not index_object:
+                raise FileNotFoundError("Please supply a valid path to a dataset index file or valid index object!")
+        if index_object and index_json_path:
+            raise ValueError("you must only define either the index_json_path or index object, not both!")
+        if subset_object and subset_json_path:
+            raise ValueError("you must only define either the subset_json_path or subset object, not both!")
         self.basepath = basepath
         self.num_workers = num_workers
         self.subset_json_path = subset_json_path
         self.index_json_path = index_json_path
+        self.subset_object = subset_object
+        self.index_object = index_object
         self.classes = []
         self.class_to_idx = {}
         self.dataset_metadata = {} if dataset_metadata is None else {i: dataset_metadata[i] for i in dataset_metadata if i != 'split'}
@@ -145,8 +151,9 @@ class BetterLoader: # pylint: disable=too-few-public-methods
         if train_test_val_instances is None:
             train_test_val_instances = simple_metadata()['train_test_val_instances']
 
+
         index, subset_json = fetch_json_from_path(
-            self.index_json_path), fetch_json_from_path(self.subset_json_path)
+            self.index_json_path) if self.index_json_path else self.index_object, fetch_json_from_path(self.subset_json_path) if self.subset_json_path else self.subset_object
 
         datasets = None
 

@@ -31,6 +31,23 @@ class Integration(unittest.TestCase):
         assert sizes["test"] == 2
         assert sizes["val"] == 2
 
+    def test_defaults_with_object(self):
+        '''Test the BetterLoader call using the default parameters but using index_object not index_json_path
+        '''
+        index = {"class1":["image0.jpg","image1.jpg","image2.jpg","image3.jpg"],"class2":["image4.jpg","image5.jpg","image6.jpg","image7.jpg"]}
+        basepath = "./examples/sample_dataset/"
+        batch_size = 2
+
+        loader = BetterLoader(basepath=basepath, index_object=index)
+        dataloaders, sizes = loader.fetch_segmented_dataloaders(
+            batch_size=batch_size, transform=None)
+
+        assert not dataloaders is None
+
+        assert sizes["train"] == 4
+        assert sizes["test"] == 2
+        assert sizes["val"] == 2
+
     def test_simple_metadata(self):
         '''Test the BetterLoader call using the same default functions, but passed in this time
         '''
@@ -114,7 +131,7 @@ class Integration(unittest.TestCase):
         basepath = "./examples/sample_dataset/"
 
         dataset_metadata = simple_metadata()
-        self.assertRaisesRegex(FileNotFoundError, "Please supply a valid path to a dataset index file!",
+        self.assertRaisesRegex(FileNotFoundError, "Please supply a valid path to a dataset index file or valid index object!",
                                BetterLoader, basepath, index_json, dataset_metadata)
 
 if __name__ == '__main__':
