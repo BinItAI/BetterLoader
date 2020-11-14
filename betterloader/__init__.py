@@ -16,7 +16,7 @@ import torch
 import torchvision
 
 from .ImageFolderCustom import ImageFolderCustom
-from .defaults import simple
+from .defaults import simple_metadata
 
 def fetch_json_from_path(path):
     """Helper method to fetch json dict from file
@@ -143,7 +143,7 @@ class BetterLoader: # pylint: disable=too-few-public-methods
             "train_test_val_instances"), self._fetch_metadata("classdata"), self._fetch_metadata("pretransform")
 
         if train_test_val_instances is None:
-            train_test_val_instances = simple.train_test_val_instances
+            train_test_val_instances = simple_metadata()['train_test_val_instances']
 
         index, subset_json = fetch_json_from_path(
             self.index_json_path), fetch_json_from_path(self.subset_json_path)
