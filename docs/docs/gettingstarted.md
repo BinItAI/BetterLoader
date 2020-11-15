@@ -45,9 +45,11 @@ print("Dataloader sizes: {}".format(str(sizes)))
 | field        |      type      |   description | optional (datatype) |
 | ------------- | :-----------: | -----: | -----------: |
 | basepath      | str | path to image directory | no |
-| index_json_path      | str | path to index file | no |
+| index_json_path      | str | path to index file | yes (None) |
+| index_object | dict| An object representation of an index file | yes (None) |
 | num_workers      | int | number of workers | yes (1) |
 | subset_json_path      | str | path to subset json file | yes (None) |
+| subset_object | dict| An object representation of the subset file | yes (None) |
 | dataset_metadata      |   metadata object for dataset    |   list of optional metadata attributes to customise the BetterLoader | yes (None) |
 
 #### Dataset Metadata
