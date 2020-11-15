@@ -34,5 +34,6 @@ As their names suggest, subset JSON files are used to instruct the BetterLoader 
 ```
 
 ## Usage
-Index files are a <b>required</b> parameter for the BetterLoader. This is because they replace the traditional approach that the PyTorch dataloader uses involving using folder names to infer class label. Since we've done away with this mechanism entirely, index files are essential to loading data for supervised learning tasks.<br />
+An index is required to use the BetterLoader, either a path to an index json must be supplied, or an index object. The index object may be any python object, and replaces what would be the result of loading the index json. An index is required because it replaces the traditional approach that the PyTorch dataloader uses involving using folder names to infer class label. Since we've done away with this mechanism entirely, an index is essential to loading data for supervised learning tasks.<br />
 Subset files, are an optional parameter. If a subset file is not specified, then the BetterLoader will just load your entire dataset :)
+You may also use a subset object, which is entirely analogous to the way index objects work.
