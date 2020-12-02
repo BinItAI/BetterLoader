@@ -9,7 +9,7 @@ import styles from './styles.module.css';
 const features = [
   {
     title: 'Easy to Use',
-    imageUrl: 'img/undraw_docusaurus_mountain.svg',
+    imageUrl: 'img/undraw_fast_loading.svg',
     description: (
       <>
         BetterLoader was designed from the ground up to be easily installed and
@@ -19,7 +19,7 @@ const features = [
   },
   {
     title: 'Expanded Functionality',
-    imageUrl: 'img/undraw_docusaurus_tree.svg',
+    imageUrl: 'img/undraw_expanded_functionality.svg',
     description: (
       <>
         BetterLoader lets you focus on your deep learning models, while we handle conditional data loading, or multiple copies of files.
@@ -28,7 +28,7 @@ const features = [
   },
   {
     title: 'Compatible with PyTorch',
-    imageUrl: 'img/undraw_docusaurus_react.svg',
+    imageUrl: 'img/undraw_compatibility.svg',
     description: (
       <>
         BetterLoader just extends PyTorch classes. Plug BetterLoader calls right into your workflow, with minimal changes.
