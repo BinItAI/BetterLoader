@@ -7,7 +7,18 @@ from PIL import Image
 
 from .DatasetFolder import DatasetFolder
 
-IMG_EXTENSIONS = ('.jpg', '.jpeg', '.png', '.ppm', '.bmp', '.pgm', '.tif', '.tiff', '.webp')
+IMG_EXTENSIONS = (
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".ppm",
+    ".bmp",
+    ".pgm",
+    ".tif",
+    ".tiff",
+    ".webp",
+)
+
 
 def pil_loader(path):
     """open path as file to avoid ResourceWarning (https://github.com/python-pillow/Pillow/issues/835)
@@ -15,10 +26,10 @@ def pil_loader(path):
         path: Load image at path
     Returns:
         Pil.Image: A PIL image object in RGB format
-    """ 
-    with open(path, 'rb') as f:
+    """
+    with open(path, "rb") as f:
         img = Image.open(f)
-        return img.convert('RGB')
+        return img.convert("RGB")
 
 
 def accimage_loader(path):
@@ -28,7 +39,8 @@ def accimage_loader(path):
     Returns:
         var: Image object, either as an accimage, or a PIL image
     """
-    import accimage #pylint: disable=import-error
+    import accimage  # pylint: disable=import-error
+
     try:
         return accimage.Image(path)
     except IOError:
@@ -44,10 +56,12 @@ def default_loader(path):
         var: Image object, either as an accimage, or a PIL image
     """
     from torchvision import get_image_backend
-    if get_image_backend() == 'accimage':
+
+    if get_image_backend() == "accimage":
         return accimage_loader(path)
-    
+
     return pil_loader(path)
+
 
 def default_classdata(_, index):
     """Load default classdata if no class data is passed
@@ -63,7 +77,8 @@ def default_classdata(_, index):
     class_to_idx = {classes[i]: i for i in range(len(classes))}
     return classes, class_to_idx
 
-class ImageFolderCustom(DatasetFolder): # pylint: disable=too-few-public-methods
+
+class ImageFolderCustom(DatasetFolder):  # pylint: disable=too-few-public-methods
     """A generic data loader for images ::
 
     Args:
@@ -80,10 +95,10 @@ class ImageFolderCustom(DatasetFolder): # pylint: disable=too-few-public-methods
             this can really be whatever you want because it is only handled by train_test_val_instances.
         train_test_val_instances (callable, optional): A function that takes:
             a root directory,
-            a mapping of class names to indeces, 
+            a mapping of class names to indeces,
             the index,
             and is_valid_file
-            and returns a tuple of lists containing the instance data for each of train test and val, 
+            and returns a tuple of lists containing the instance data for each of train test and val,
             the instance data in the list is a tuple and can have whatever structure you want as long as the image path is the first element
                 each of these tuples is processed by the pretransform
         class_data (tuple, optional): the first element is a list of the classes, the second is a mapping of the classes to their indeces
@@ -95,20 +110,33 @@ class ImageFolderCustom(DatasetFolder): # pylint: disable=too-few-public-methods
         imgs (list): List of (image path, class_index) tuples
     """
 
-    def __init__(self, root, transform=None, target_transform=None,
-                 loader=default_loader, is_valid_file=None, instance='train', 
-                 index = None, train_test_val_instances=None, class_data=None,
-                 pretransform = None):
+    def __init__(
+        self,
+        root,
+        transform=None,
+        target_transform=None,
+        loader=default_loader,
+        is_valid_file=None,
+        instance="train",
+        index=None,
+        train_test_val_instances=None,
+        class_data=None,
+        pretransform=None,
+    ):
 
         class_data = default_classdata if class_data is None else class_data
 
-        super(ImageFolderCustom, self).__init__(root, loader, IMG_EXTENSIONS if is_valid_file is None else None,
-                                          transform= transform,
-                                          target_transform= target_transform,
-                                          is_valid_file= is_valid_file, 
-                                          instance = instance,
-                                          index = index,
-                                          train_test_val_instances = train_test_val_instances,
-                                          class_data= class_data,
-                                          pretransform = pretransform)
+        super(ImageFolderCustom, self).__init__(
+            root,
+            loader,
+            IMG_EXTENSIONS if is_valid_file is None else None,
+            transform=transform,
+            target_transform=target_transform,
+            is_valid_file=is_valid_file,
+            instance=instance,
+            index=index,
+            train_test_val_instances=train_test_val_instances,
+            class_data=class_data,
+            pretransform=pretransform,
+        )
         self.imgs = self.samples

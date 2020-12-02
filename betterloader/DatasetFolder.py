@@ -8,6 +8,7 @@ import os.path
 
 from torchvision.datasets import VisionDataset
 
+
 def has_file_allowed_extension(filename, extensions):
     """Checks if a file is an allowed extension.
 
@@ -19,6 +20,7 @@ def has_file_allowed_extension(filename, extensions):
         bool: True if the filename ends with one of given extensions
     """
     return filename.lower().endswith(extensions)
+
 
 def default_pretransform(sample, values):
     """Returns the image sample without transforming it at all
@@ -33,7 +35,16 @@ def default_pretransform(sample, values):
     target = values[1]
     return sample, target
 
-def make_dataset(directory, class_to_idx, extensions=None, is_valid_file=None, instance='train', index=None, train_test_val_instances=None):
+
+def make_dataset(
+    directory,
+    class_to_idx,
+    extensions=None,
+    is_valid_file=None,
+    instance="train",
+    index=None,
+    train_test_val_instances=None,
+):
     """Makes the actual dataset
     Args:
         directory (string): Root directory path.
@@ -51,18 +62,24 @@ def make_dataset(directory, class_to_idx, extensions=None, is_valid_file=None, i
     both_none = extensions is None and is_valid_file is None
     both_something = extensions is not None and is_valid_file is not None
     if both_none or both_something:
-        raise ValueError("Both extensions and is_valid_file cannot be None or not None at the same time")
+        raise ValueError(
+            "Both extensions and is_valid_file cannot be None or not None at the same time"
+        )
     if extensions is not None:
+
         def is_valid_file(x):
             return has_file_allowed_extension(x, extensions)
 
-    train, test, val = train_test_val_instances(directory, class_to_idx, index, is_valid_file)
+    train, test, val = train_test_val_instances(
+        directory, class_to_idx, index, is_valid_file
+    )
 
-    return train if instance == 'train' else test if instance == 'test' else val
+    return train if instance == "train" else test if instance == "test" else val
+
 
 class DatasetFolder(VisionDataset):
     """A generic data loader ::
-    
+
     Args:
         root (string): Root directory path.
         loader (callable): A function to load a sample given its path.
@@ -81,10 +98,10 @@ class DatasetFolder(VisionDataset):
             this can really be whatever you want because it is only handled by train_test_val_instances.
         train_test_val_instances (callable, optional): A function that takes:
             a root directory,
-            a mapping of class names to indeces, 
+            a mapping of class names to indeces,
             the index,
             and is_valid_file
-            and returns a tuple of lists containing the instance data for each of train test and val, 
+            and returns a tuple of lists containing the instance data for each of train test and val,
             the instance data in the list is a tuple and can have whatever structure you want as long as the image path is the first element
                 each of these tuples is processed by the pretransform
         class_data (tuple, optional): the first element is a list of the classes, the second is a mapping of the classes to their indeces
@@ -96,20 +113,42 @@ class DatasetFolder(VisionDataset):
         pretransform (callable): returns a transformed image using data in the sample
         class_data (tuple): (classes, class_to_idx)
         samples (tuple): tuple of three (train test val) lists of (sample path, class_index, whatever else, ...) tuples
-        Unused: targets (list): The class_index value for each image in the dataset 
+        Unused: targets (list): The class_index value for each image in the dataset
     """
 
-    def __init__(self, root, loader, extensions, transform,
-                 target_transform, is_valid_file, instance,
-                 index, train_test_val_instances, class_data, pretransform):
+    def __init__(
+        self,
+        root,
+        loader,
+        extensions,
+        transform,
+        target_transform,
+        is_valid_file,
+        instance,
+        index,
+        train_test_val_instances,
+        class_data,
+        pretransform,
+    ):
 
-        super(DatasetFolder, self).__init__(root, transform=transform,
-                                            target_transform=target_transform)
+        super(DatasetFolder, self).__init__(
+            root, transform=transform, target_transform=target_transform
+        )
         self.index = index
         self.class_data = class_data
-        self.pretransform = default_pretransform if pretransform is None else pretransform
+        self.pretransform = (
+            default_pretransform if pretransform is None else pretransform
+        )
         classes, class_to_idx = self._find_classes(self.root)
-        samples = make_dataset(self.root, class_to_idx, extensions, is_valid_file, instance, index, train_test_val_instances)
+        samples = make_dataset(
+            self.root,
+            class_to_idx,
+            extensions,
+            is_valid_file,
+            instance,
+            index,
+            train_test_val_instances,
+        )
 
         self.loader = loader
         self.extensions = extensions
@@ -147,7 +186,6 @@ class DatasetFolder(VisionDataset):
         """
         # path, target, pt = self.samples[index]
 
-
         values = self.samples[index]
         path = values[0]
         sample = self.loader(path)
@@ -159,7 +197,6 @@ class DatasetFolder(VisionDataset):
             target = self.target_transform(target)
 
         return sample, target
-
 
     def __len__(self):
         return len(self.samples)

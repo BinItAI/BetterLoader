@@ -1,5 +1,0 @@
-[FORMAT]
-max-line-length=240
-
-[MESSAGES CONTROL]
-disable=locally-disabled,too-many-arguments,too-many-instance-attributes,invalid-name,import-outside-toplevel,super-with-arguments,function-redefined,trailing-whitespace,import-error
