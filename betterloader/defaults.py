@@ -21,6 +21,8 @@ def _simple():
         Returns:
             (tuple): Tuple of length 3 containing train, test, val instances
         """
+
+
         train, test, val = [], [], []
         i = 0
         for target_class in sorted(class_to_idx.keys()):
@@ -40,16 +42,20 @@ def _simple():
                 int(len(instances) * trainp) : int(len(instances) * (1 - valp))
             ]
             val += instances[int(len(instances) * (1 - valp)) :]
+
         return train, test, val
 
     def classdata(_, index):
+
         """Given class data, just create the default classes list and class_to_idx dict"""
         classes = list(index.keys())
         classes.sort()
         class_to_idx = {classes[i]: i for i in range(len(classes))}
+
         return classes, class_to_idx
 
     def pretransform(sample, values):
+
         """Given a sample and a values list as specified in the docs, just return the path"""
         target = values[1]
         return sample, target
