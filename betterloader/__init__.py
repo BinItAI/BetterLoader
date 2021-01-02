@@ -12,7 +12,7 @@ import json
 import os
 from collections import defaultdict
 import torchvision.transforms as transforms
-from .standard_transforms import GaussianBlur, TransformWhileSampling
+from .standard_transforms import TransformWhileSampling
 from torch.utils.data.sampler import SubsetRandomSampler
 
 import torch
@@ -354,7 +354,6 @@ class UnsupervisedBetterLoader(BetterLoader):
             dataset_metadata,
         )
 
-        print("On computer version")
         self.base_experiment_name = base_experiment_details[0] if base_experiment_details is not None else 'simclr'
         self.experiment_transform_params = base_experiment_details[1:]
 
@@ -392,7 +391,7 @@ class UnsupervisedBetterLoader(BetterLoader):
                 transforms.RandomHorizontalFlip(),
                 transforms.RandomApply([color_jitter], p=0.8),
                 transforms.RandomGrayscale(p=0.2),
-                GaussianBlur(kernel_size=[int(0.1 * input_shape[0]), int(0.1 * input_shape[0])]),
+                transforms.GaussianBlur(kernel_size=[int(0.1 * input_shape[0]), int(0.1 * input_shape[0])]),
                 transforms.ToTensor()
             ])
 
