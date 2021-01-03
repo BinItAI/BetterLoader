@@ -7,7 +7,7 @@ import os
 
 sys.path.append(os.getcwd())
 
-from betterloader import BetterLoader
+from betterloader import BetterLoader, UnsupervisedBetterLoader
 from betterloader.defaults import simple_metadata, regex_metadata, collate_metadata
 
 # pylint: disable=no-self-use
@@ -25,6 +25,28 @@ class Integration(unittest.TestCase):
         loader = BetterLoader(basepath=basepath, index_json_path=index_json)
         dataloaders, sizes = loader.fetch_segmented_dataloaders(
             batch_size=batch_size, transform=None
+        )
+
+        assert dataloaders is not None
+
+        assert sizes["train"] == 4
+        assert sizes["test"] == 2
+        assert sizes["val"] == 2
+
+    def test_unsupervised(self):
+        """Test the BetterLoader Unsupervised call using the default parameters"""
+        index_json = "./examples/sample_index_unsupervised.json"
+        basepath = "./examples/sample_dataset/"
+        batch_size = 2
+        metadata = collate_metadata()
+        better_loader = UnsupervisedBetterLoader(
+            basepath=basepath,
+            base_experiment_details=["simclr", 1, (150, 150)],
+            index_json_path=index_json,
+            dataset_metadata=metadata,
+        )
+        dataloaders, sizes = better_loader.fetch_segmented_dataloaders(
+            batch_size=batch_size
         )
 
         assert dataloaders is not None

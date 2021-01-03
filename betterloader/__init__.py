@@ -205,8 +205,6 @@ class BetterLoader:  # pylint: disable=too-few-public-methods
             self._fetch_metadata("pretransform"),
         )
 
-
-
         if train_test_val_instances is None:
             train_test_val_instances = simple_metadata()["train_test_val_instances"]
 
@@ -271,10 +269,12 @@ class BetterLoader:  # pylint: disable=too-few-public-methods
                     batch_size=batch_size,
                     num_workers=self.num_workers,
                     collate_fn=custom_collator,
-                    sampler=SubsetRandomSampler(list(range(len(x)))) if sampler == 'subset_sampling' else None,
+                    sampler=SubsetRandomSampler(list(range(len(x))))
+                    if sampler == "subset_sampling"
+                    else None,
                     pin_memory=pin_mem,
                     drop_last=drop_last,
-                    shuffle=False
+                    shuffle=False,
                 )
                 for x in [datasets[0]]
             ] + [
@@ -283,7 +283,9 @@ class BetterLoader:  # pylint: disable=too-few-public-methods
                     batch_size=batch_size,
                     num_workers=self.num_workers,
                     collate_fn=custom_collator,
-                    sampler=SubsetRandomSampler(list(range(len(x)))) if sampler == 'subset_sampling' else None,
+                    sampler=SubsetRandomSampler(list(range(len(x))))
+                    if sampler == "subset_sampling"
+                    else None,
                     pin_memory=pin_mem,
                     drop_last=drop_last,
                 )
@@ -329,20 +331,19 @@ class BetterLoader:  # pylint: disable=too-few-public-methods
 
         return loaders, sizes
 
+
 class UnsupervisedBetterLoader(BetterLoader):
-
-
-
-    def __init__(self,
-                 basepath,
-                 base_experiment_details,
-                 index_json_path=None,
-                 num_workers=1,
-                 index_object=None,
-                 subset_json_path=None,
-                 subset_object=None,
-                 dataset_metadata=None,
-                 ):
+    def __init__(
+        self,
+        basepath,
+        base_experiment_details,
+        index_json_path=None,
+        num_workers=1,
+        index_object=None,
+        subset_json_path=None,
+        subset_object=None,
+        dataset_metadata=None,
+    ):
 
         super(UnsupervisedBetterLoader, self).__init__(
             basepath,
@@ -354,56 +355,78 @@ class UnsupervisedBetterLoader(BetterLoader):
             dataset_metadata,
         )
 
-        self.base_experiment_name = base_experiment_details[0] if base_experiment_details is not None else 'simclr'
+        self.base_experiment_name = (
+            base_experiment_details[0]
+            if base_experiment_details is not None
+            else "simclr"
+        )
         self.experiment_transform_params = base_experiment_details[1:]
 
         self.setup_sampling()
         self.transforms = self.setup_transform()
 
-
-
     def setup_sampling(self):
 
-        if self.base_experiment_name == 'simclr':
+        if self.base_experiment_name == "simclr":
 
-            if self.dataset_metadata['sample_type'] is None:
-                self.dataset_metadata['sample_type'] = 'subset_sampling'
+            if self.dataset_metadata["sample_type"] is None:
+                self.dataset_metadata["sample_type"] = "subset_sampling"
 
         else:
-            raise Exception("Iteration of experiment is not currently supported")
-
+            raise Exception(
+                "Iteration of experiment (name: {}) is not currently supported".format(
+                    self.base_experiment_name
+                )
+            )
 
     def setup_transform(self):
 
-        if self.base_experiment_name == 'simclr':
+        if self.base_experiment_name == "simclr":
 
             if not len(self.experiment_transform_params) == 2:
-                raise Exception("For SimClR, experiment details should be of the form [experiment_name, side_jitter, input_shape]")
+                raise Exception(
+                    "For SimClR, experiment details should be of the form [experiment_name, side_jitter, input_shape]"
+                )
 
             side_jitter = self.experiment_transform_params[0]
             input_shape = self.experiment_transform_params[1]
 
-            color_jitter = transforms.ColorJitter(0.8 * side_jitter, 0.8 * side_jitter, 0.8 * side_jitter,
-                                                  0.2 * side_jitter)
+            color_jitter = transforms.ColorJitter(
+                0.8 * side_jitter,
+                0.8 * side_jitter,
+                0.8 * side_jitter,
+                0.2 * side_jitter,
+            )
 
-            all_transforms = transforms.Compose([
-                transforms.RandomResizedCrop(size=input_shape[0]),
-                transforms.RandomHorizontalFlip(),
-                transforms.RandomApply([color_jitter], p=0.8),
-                transforms.RandomGrayscale(p=0.2),
-                transforms.GaussianBlur(kernel_size=[int(0.1 * input_shape[0]), int(0.1 * input_shape[0])]),
-                transforms.ToTensor()
-            ])
+            all_transforms = transforms.Compose(
+                [
+                    transforms.RandomResizedCrop(size=input_shape[0]),
+                    transforms.RandomHorizontalFlip(),
+                    transforms.RandomApply([color_jitter], p=0.8),
+                    transforms.RandomGrayscale(p=0.2),
+                    transforms.GaussianBlur(
+                        kernel_size=[
+                            int(0.1 * input_shape[0]),
+                            int(0.1 * input_shape[0]),
+                        ]
+                    ),
+                    transforms.ToTensor(),
+                ]
+            )
 
             return TransformWhileSampling(all_transforms)
 
-
-
         else:
 
-            raise Exception("Iteration of experiment is not currently supported")
+            raise Exception(
+                "Iteration of experiment (name: {}) is not currently supported".format(
+                    self.base_experiment_name
+                )
+            )
 
     def fetch_segmented_dataloaders(self, batch_size):
 
-        dataloaders, sizes = super(UnsupervisedBetterLoader, self).fetch_segmented_dataloaders(batch_size, self.transforms)
+        dataloaders, sizes = super(
+            UnsupervisedBetterLoader, self
+        ).fetch_segmented_dataloaders(batch_size, self.transforms)
         return dataloaders, sizes
