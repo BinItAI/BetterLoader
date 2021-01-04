@@ -24,8 +24,8 @@ setup(
         "future==0.18.2",
         "numpy==1.19.1",
         "Pillow==7.2.0",
-        "torch==1.7.0",
-        "torchvision==0.8.1",
+        "torch==1.7.1",
+        "torchvision==0.8.2",
     ],
     classifiers=[
         "Development Status :: 3 - Alpha",

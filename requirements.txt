@@ -48,8 +48,8 @@ sphinxcontrib-jsmath==1.0.1
 sphinxcontrib-qthelp==1.0.3
 sphinxcontrib-serializinghtml==1.1.4
 toml==0.10.1
-torch==1.7.0
-torchvision==0.8.1
+torch==1.7.1
+torchvision==0.8.2
 tqdm==4.48.2
 twine==3.2.0
 typed-ast==1.4.1
