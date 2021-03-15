@@ -39,7 +39,7 @@ jobs:
 
       - name: Install documentation dependancies & build docs
         run: |
-          cd docs
+          cd website
           yarn
           yarn build
 
@@ -60,7 +60,7 @@ jobs:
           git config --global user.name "${{ secrets.GH_NAME }}"
           git config --global user.email "${{ secrets.GH_EMAIL }}"
           echo "machine github.com login ${{ secrets.GH_NAME }} password ${{ secrets.GH_TOKEN }}" > ~/.netrc
-          cd docs && yarn
+          cd website && yarn
           yarn deploy
         env:
           GIT_USER: ${{ secrets.GH_NAME }}

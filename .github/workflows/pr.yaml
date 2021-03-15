@@ -40,6 +40,6 @@ jobs:
 
       - name: Install documentation dependancies & build docs
         run: |
-          cd docs
+          cd website
           yarn
           yarn build
