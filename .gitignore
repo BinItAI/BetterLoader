@@ -139,3 +139,6 @@ cython_debug/
 
 # Ignore vscode files
 .vscode/
+
+# Ignore sphinx static files in website/
+website/static/api

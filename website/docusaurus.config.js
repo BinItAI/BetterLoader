@@ -3,7 +3,8 @@ module.exports = {
   tagline: 'The augmented PyTorch dataloader',
   url: 'https://binitai.github.io',
   baseUrl: '/BetterLoader/',
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
+  onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'BinItAI',
   projectName: 'BetterLoader',
@@ -20,6 +21,11 @@ module.exports = {
           activeBasePath: 'docs',
           label: 'Docs',
           position: 'left',
+        },
+        {
+          href: "/api",
+          label: "API",
+          position: "left"
         },
         {to: 'blog', label: 'Blog', position: 'left'},
         {
