@@ -241,12 +241,24 @@ class BetterLoader:  # pylint: disable=too-few-public-methods
             ]
         elif type(transform) == type({}):
             #if transform is a dict treat like {'train':transform1, 'test':transform2, 'val':transform3}
-        else:
-
             datasets = [
                 ImageFolderCustom(
                     root=self.basepath,
                     transform=transform[x],
+                    is_valid_file=check_valid(subset_json),
+                    instance=x,
+                    index=index,
+                    train_test_val_instances=train_test_val_instances_wrap,
+                    class_data=class_data,
+                    pretransform=pretransform,
+                )
+                for x in ("train", "test", "val")
+            ]
+        else:
+            datasets = [
+                ImageFolderCustom(
+                    root=self.basepath,
+                    transform=transform,
                     is_valid_file=check_valid(subset_json),
                     instance=x,
                     index=index,
