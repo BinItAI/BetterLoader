@@ -192,7 +192,7 @@ class BetterLoader:  # pylint: disable=too-few-public-methods
 
         Args:
             batch_size (string): Image batch size.
-            transform (callable, optional): PyTorch transform object
+            transform (callable or dict, optional): PyTorch transform object. This parameter may also be a  dict with keys of 'train', 'test', and 'val', in order to enable separate transforms for each split.
 
          Returns:
             dict: A dictionary of dataloaders for train test split
@@ -239,8 +239,8 @@ class BetterLoader:  # pylint: disable=too-few-public-methods
                 )
                 for x in ("train", "test", "val")
             ]
-        elif type(transform) == type({}):
-            #if transform is a dict treat like {'train':transform1, 'test':transform2, 'val':transform3}
+        elif isinstance(transform, dict):
+            # if transform is a dict treat like {'train':transform1, 'test':transform2, 'val':transform3}
             datasets = [
                 ImageFolderCustom(
                     root=self.basepath,
