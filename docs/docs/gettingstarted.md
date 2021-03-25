@@ -16,11 +16,11 @@ pip install betterloader
 ### From Source
 For developers, BetterLoader's source may also be found at our [Github repository](https://github.com/BinItAI/BetterLoader). You can also install BetterLoader from source, but if you're just trying to use the package, pip is probably a far better bet.
 
-## Usage
+## Why BetterLoader?
 BetterLoader really shines when you're working with a dataset, and you want to load subsets of image classes conditionally. Say you have 3 folders of images, and you only want to load those images that conform to a specific condition, <b>or</b> those that are present in a pre-defined subset file. What if you want to load a specific set of crops per source image, given a set of source images? BetterLoader can do all this, and more.<br />
 <b>Note:</b> BetterLoader currently only supports supervised deep learning tasks. Unsupervised learning support coming soon!
 
-### Basic Usage
+### Creating a BetterLoader
 Using BetterLoader with its default parameters lets it function just like the regular Python dataloader. A few points worth noting are that:
 - BetterLoader does not expect a nested folder structure. In its current iteration, files are expected to all be present in the root directory. This lets us use index files to define classes and labels dynamically, and vary them from experiment to experiment.
 - <b>Every</b> instance of BetterLoader requires an index file to function. The default index file format maps class names to a list of image paths, but the index file can be any json file as long as you modify train_test_val_instances to parse it correctly; for example you could instead map class names to regex for the file paths and pass a train_test_val_instances that reads the files based on that regex. Sample index files may be found <a href="/docs/files">here</a>.
@@ -51,6 +51,21 @@ print("Dataloader sizes: {}".format(str(sizes)))
 | subset_json_path      | str | path to subset json file | yes (None) |
 | subset_object | dict| An object representation of the subset file | yes (None) |
 | dataset_metadata      |   metadata object for dataset    |   list of optional metadata attributes to customise the BetterLoader | yes (None) |
+
+### Usage
+The BetterLoader class' `fetch_segmented_dataloaders` function allows for a user to obtain a tuple of dictionaries, which are most commonly referenced as `(dataloaders, sizes)`. Each dictionary consequently contains `train`, `test`, and `val` keys, allowing for easy access to the dataloaders, as well as their sizes. The function header for the same may be found below:
+
+```
+def fetch_segmented_dataloaders(self, batch_size, transform=None)
+"""Fetch custom dataloaders, which may be used with any PyTorch model
+    Args:
+    batch_size (string): Image batch size.
+    transform (callable or dict, optional): PyTorch transform object. This parameter may also be a dict with keys of 'train', 'test', and 'val', in order to enable separate transforms for each split.
+    Returns:
+        dict: A dictionary of dataloaders for train test split
+        dict: A dictionary of dataset sizes for train test split
+"""
+```
 
 #### Dataset Metadata
 BetterLoader accepts certain key value pairs as dataset metadata, in order to enable some custom functionality.

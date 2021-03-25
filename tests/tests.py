@@ -10,7 +10,21 @@ sys.path.append(os.getcwd())
 from betterloader import BetterLoader, UnsupervisedBetterLoader
 from betterloader.defaults import simple_metadata, regex_metadata, collate_metadata
 
+from torchvision import transforms
+
 # pylint: disable=no-self-use
+
+basic_transform = transforms.Compose(
+    [
+        transforms.CenterCrop(10),
+    ]
+)
+
+dictionary_transform = {
+    "train": basic_transform,
+    "test": basic_transform,
+    "val": basic_transform,
+}
 
 
 class Integration(unittest.TestCase):
@@ -25,6 +39,40 @@ class Integration(unittest.TestCase):
         loader = BetterLoader(basepath=basepath, index_json_path=index_json)
         dataloaders, sizes = loader.fetch_segmented_dataloaders(
             batch_size=batch_size, transform=None
+        )
+
+        assert dataloaders is not None
+
+        assert sizes["train"] == 4
+        assert sizes["test"] == 2
+        assert sizes["val"] == 2
+
+    def test_transform(self):
+        """Test the BetterLoader call using the default parameters"""
+        index_json = "./examples/sample_index.json"
+        basepath = "./examples/sample_dataset/"
+        batch_size = 2
+
+        loader = BetterLoader(basepath=basepath, index_json_path=index_json)
+        dataloaders, sizes = loader.fetch_segmented_dataloaders(
+            batch_size=batch_size, transform=basic_transform
+        )
+
+        assert dataloaders is not None
+
+        assert sizes["train"] == 4
+        assert sizes["test"] == 2
+        assert sizes["val"] == 2
+
+    def test_transformdict(self):
+        """Test the BetterLoader call using the default parameters"""
+        index_json = "./examples/sample_index.json"
+        basepath = "./examples/sample_dataset/"
+        batch_size = 2
+
+        loader = BetterLoader(basepath=basepath, index_json_path=index_json)
+        dataloaders, sizes = loader.fetch_segmented_dataloaders(
+            batch_size=batch_size, transform=dictionary_transform
         )
 
         assert dataloaders is not None
