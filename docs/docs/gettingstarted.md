@@ -50,12 +50,12 @@ print("Dataloader sizes: {}".format(str(sizes)))
 | num_workers      | int | number of workers | yes (1) |
 | subset_json_path      | str | path to subset json file | yes (None) |
 | subset_object | dict| An object representation of the subset file | yes (None) |
-| dataset_metadata      |   metadata object for dataset    |   list of optional metadata attributes to customise the BetterLoader | yes (None) |
+| dataset_metadata      |   metadata object for dataset    |   list of optional metadata attributes to customise the BetterLoader (more below) | yes (None) |
 
 ### Usage
 The BetterLoader class' `fetch_segmented_dataloaders` function allows for a user to obtain a tuple of dictionaries, which are most commonly referenced as `(dataloaders, sizes)`. Each dictionary consequently contains `train`, `test`, and `val` keys, allowing for easy access to the dataloaders, as well as their sizes. The function header for the same may be found below:
 
-```
+```python
 def fetch_segmented_dataloaders(self, batch_size, transform=None)
 """Fetch custom dataloaders, which may be used with any PyTorch model
     Args:
@@ -67,8 +67,8 @@ def fetch_segmented_dataloaders(self, batch_size, transform=None)
 """
 ```
 
-#### Dataset Metadata
-BetterLoader accepts certain key value pairs as dataset metadata, in order to enable some custom functionality.
+### Metadata Parameters
+BetterLoader accepts certain key value pairs under the `dataset_metadata` parameter, in order to enable some custom functionality.
 1. pretransform (callable, optional): This allows us to load a custom pretransform before images are loaded into the dataloader and transformed.
   For basic usage a pretransform that does not do anything (the default) is usually sufficient. An example use case for the customizability is listed below.
 2. classdata (callable, optional): Defines a custom mapping for a custom format index file to read data from the DatasetFolder class.
